@@ -1,0 +1,6 @@
+@CasaEmConta.Api_HostAddress = http://localhost:5077
+
+GET {{CasaEmConta.Api_HostAddress}}/api/health
+Accept: application/json
+
+###
