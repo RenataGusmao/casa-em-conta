@@ -4,7 +4,7 @@ Casa em Conta e um sistema web para controle de gastos residenciais.
 
 ## Status
 
-Esta etapa entrega apenas a estrutura inicial do projeto: API, frontend, configuracoes basicas e teste automatizado inicial. As funcionalidades de dominio serao implementadas nas proximas etapas.
+Esta etapa entrega a estrutura inicial do projeto e o back-end do modulo de pessoas. As funcionalidades de transacoes, totais, autenticacao e interface de cadastro ainda serao implementadas nas proximas etapas.
 
 ## Tecnologias
 
@@ -41,6 +41,8 @@ casa-em-conta/
 
 ```powershell
 dotnet restore
+dotnet tool restore
+dotnet tool run dotnet-ef database update --project backend/CasaEmConta.Api/CasaEmConta.Api.csproj --startup-project backend/CasaEmConta.Api/CasaEmConta.Api.csproj
 dotnet run --project backend/CasaEmConta.Api/CasaEmConta.Api.csproj --launch-profile https
 ```
 
@@ -55,6 +57,36 @@ Health check:
 ```text
 https://localhost:7154/api/health
 ```
+
+## Modulo de pessoas
+
+O modulo de pessoas esta disponivel na API.
+
+Endpoints:
+
+```text
+GET    /api/people
+GET    /api/people/{id}
+POST   /api/people
+DELETE /api/people/{id}
+```
+
+Exemplo de cadastro:
+
+```json
+{
+  "name": "Ana Souza",
+  "age": 28
+}
+```
+
+Regras de validacao:
+
+- `name` e obrigatorio, nao pode conter apenas espacos e possui limite de 150 caracteres.
+- `age` deve estar entre 0 e 120 anos.
+- O identificador e gerado automaticamente pelo banco.
+
+O banco SQLite local e criado em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. Arquivos `.db`, `.db-shm` e `.db-wal` sao ignorados pelo Git.
 
 ## Executar o front-end
 
@@ -74,4 +106,4 @@ dotnet test
 
 ## Proximas etapas
 
-As entidades, cadastros, transacoes, totais, migrations e demais regras de negocio ainda nao foram implementados.
+Transacoes, totais, telas de cadastro e demais regras de negocio ainda nao foram implementados.
