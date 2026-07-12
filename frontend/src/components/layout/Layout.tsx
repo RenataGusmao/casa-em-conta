@@ -38,6 +38,14 @@ export function Layout() {
             >
               Transações
             </NavLink>
+            <NavLink
+              to="/totais"
+              className={({ isActive }) =>
+                isActive ? 'app-nav__link app-nav__link--active' : 'app-nav__link'
+              }
+            >
+              Totais
+            </NavLink>
           </nav>
         </div>
       </header>

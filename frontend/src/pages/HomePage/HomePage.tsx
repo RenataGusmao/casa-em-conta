@@ -44,11 +44,11 @@ export function HomePage() {
           <p className="eyebrow">Controle de gastos residenciais</p>
           <h1>Casa em Conta</h1>
           <p className="summary">
-            Cadastre pessoas e registre receitas e despesas da residência com
-            clareza.
+            Cadastre pessoas, registre receitas e despesas e consulte os totais da
+            residência com clareza.
           </p>
-          <Link to="/pessoas" className="button button--primary hero-action">
-            Acessar pessoas
+          <Link to="/totais" className="button button--primary hero-action">
+            Acessar totais
           </Link>
         </div>
 

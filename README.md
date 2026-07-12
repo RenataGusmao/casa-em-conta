@@ -4,7 +4,7 @@ Casa em Conta é um sistema web para controle de gastos residenciais.
 
 ## Status
 
-Esta etapa entrega a estrutura inicial do projeto, o módulo de pessoas completo e o módulo de transações com back-end e front-end. A consulta de totais e a autenticação ainda serão implementadas nas próximas etapas.
+Esta etapa entrega a estrutura inicial do projeto, o módulo de pessoas completo, o módulo de transações com back-end e front-end e a consulta de totais com back-end e front-end. A autenticação ainda será implementada nas próximas etapas.
 
 ## Tecnologias
 
@@ -88,6 +88,7 @@ Rotas disponíveis:
 /            Início
 /pessoas     Módulo de pessoas
 /transacoes  Módulo de transações
+/totais      Consulta de totais
 ```
 
 ## Módulo de pessoas
@@ -146,6 +147,28 @@ Regras principais:
 
 No front-end, a opção Receita fica indisponível ao selecionar uma pessoa menor de 18 anos. A listagem exibe identificador, descrição, pessoa, tipo e valor formatado em reais.
 
+## Relatório de totais
+
+A consulta de totais está disponível na API e no front-end pela rota `/totais`.
+
+Endpoint:
+
+```text
+GET /api/reports/totals
+```
+
+Dados exibidos no front-end:
+
+- receitas, despesas e saldo por pessoa;
+- pessoas sem transações com valores zerados;
+- receitas gerais, despesas gerais e saldo líquido geral;
+- valores formatados em reais;
+- botão `Atualizar` para refazer a consulta manualmente;
+- estado vazio quando não há pessoas cadastradas;
+- mensagem amigável quando a API está indisponível.
+
+Para usar a tela de totais, mantenha API e front-end rodando simultaneamente. Detalhes adicionais estão em `docs/TOTAIS.md`.
+
 O banco SQLite local é criado em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. Arquivos `.db`, `.db-shm` e `.db-wal` são ignorados pelo Git.
 
 ## Testes
@@ -166,4 +189,4 @@ npm run lint
 
 ## Próximas etapas
 
-Consulta de totais, edição de transações, autenticação e demais evoluções ainda não foram implementadas.
+Edição de transações, autenticação e demais evoluções ainda não foram implementadas.
