@@ -479,3 +479,69 @@ p {
     width: 100%;
   }
 }
+
+.transaction-form {
+  display: grid;
+  gap: 18px;
+}
+
+.form-grid--transactions {
+  grid-template-columns: minmax(0, 1.5fr) minmax(160px, 0.8fr) minmax(160px, 0.8fr);
+}
+
+.form-field--wide {
+  grid-column: span 2;
+}
+
+.form-field select {
+  appearance: none;
+  background: #fbfcfa;
+  border: 1px solid #cbd6c6;
+  border-radius: 6px;
+  color: #17211b;
+  min-height: 44px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.form-field select[aria-invalid="true"] {
+  border-color: #b4532a;
+}
+
+.field-hint {
+  color: #4c5a50;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.transactions-table {
+  min-width: 760px;
+}
+
+.transaction-type {
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 5px 9px;
+}
+
+.transaction-type--1 {
+  background: #fff1ea;
+  color: #8a3518;
+}
+
+.transaction-type--2 {
+  background: #e6f3ec;
+  color: #1f6048;
+}
+
+@media (max-width: 760px) {
+  .form-grid--transactions {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field--wide {
+    grid-column: auto;
+  }
+}
