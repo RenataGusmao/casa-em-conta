@@ -1,4 +1,4 @@
-using CasaEmConta.Api.Exceptions;
+﻿using CasaEmConta.Api.Exceptions;
 
 namespace CasaEmConta.Api.Middleware;
 
@@ -22,6 +22,11 @@ public class ExceptionHandlingMiddleware
         catch (DomainValidationException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(new { message = exception.Message });
+        }
+        catch (NotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
             await context.Response.WriteAsJsonAsync(new { message = exception.Message });
         }
         catch (Exception exception)
