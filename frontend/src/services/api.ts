@@ -1,18 +1,71 @@
-export type HealthResponse = {
+﻿export type HealthResponse = {
   status: string
   application: string
 }
 
-const fallbackBaseUrl = 'https://localhost:7154/api'
+export type ApiErrorResponse = {
+  message?: string
+}
 
-export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? fallbackBaseUrl
+const fallbackBaseUrl = 'http://localhost:5077/api'
 
-export async function getHealth(): Promise<HealthResponse> {
-  const response = await fetch(`${apiBaseUrl}/health`)
+export const apiBaseUrl = normalizeBaseUrl(
+  import.meta.env.VITE_API_BASE_URL ?? fallbackBaseUrl,
+)
 
-  if (!response.ok) {
-    throw new Error('API health check failed')
+export async function apiRequest<T>(
+  path: string,
+  options?: RequestInit,
+  fallbackMessage = 'Não foi possível conectar à API.',
+): Promise<T> {
+  let response: Response
+
+  try {
+    response = await fetch(`${apiBaseUrl}/${trimSlashes(path)}`, {
+      ...options,
+      headers: {
+        ...(options?.body ? { 'Content-Type': 'application/json' } : {}),
+        ...options?.headers,
+      },
+    })
+  } catch {
+    throw new Error('Não foi possível conectar à API.')
   }
 
-  return response.json()
+  if (!response.ok) {
+    throw new Error(await getErrorMessage(response, fallbackMessage))
+  }
+
+  if (response.status === 204) {
+    return undefined as T
+  }
+
+  return response.json() as Promise<T>
 }
+
+export function getHealth(): Promise<HealthResponse> {
+  return apiRequest<HealthResponse>(
+    'health',
+    undefined,
+    'Não foi possível conectar à API.',
+  )
+}
+
+function normalizeBaseUrl(url: string) {
+  return url.replace(/\/+$/, '')
+}
+
+function trimSlashes(path: string) {
+  return path.replace(/^\/+|\/+$/g, '')
+}
+
+async function getErrorMessage(response: Response, fallbackMessage: string) {
+  try {
+    const data = (await response.json()) as ApiErrorResponse
+
+    return data.message?.trim() || fallbackMessage
+  } catch {
+    return fallbackMessage
+  }
+}
+

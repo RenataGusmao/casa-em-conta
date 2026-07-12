@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import { getHealth } from '../services/api'
+﻿import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { getHealth } from '../../services/api'
 
 type ApiStatus = 'checking' | 'connected' | 'unavailable'
 
@@ -29,30 +30,33 @@ export function HomePage() {
   const statusLabel = {
     checking: 'Verificando API',
     connected: 'API conectada',
-    unavailable: 'API indisponivel',
+    unavailable: 'API indisponível',
   }[apiStatus]
 
   return (
-    <main className="home-page">
-      <section className="intro">
+    <section className="hero-section">
+      <div className="hero-card">
         <div className="brand-mark" aria-hidden="true">
           <span>R$</span>
         </div>
 
-        <div className="intro-content">
+        <div className="hero-content">
           <p className="eyebrow">Controle de gastos residenciais</p>
           <h1>Casa em Conta</h1>
           <p className="summary">
-            A estrutura inicial da aplicacao esta configurada para evoluir com
-            API, interface web, persistencia e testes automatizados.
+            Cadastre pessoas e prepare a base para acompanhar as despesas da
+            residência com clareza.
           </p>
+          <Link to="/pessoas" className="button button--primary hero-action">
+            Acessar pessoas
+          </Link>
         </div>
 
         <div className={`api-status api-status--${apiStatus}`}>
           <span className="status-dot" aria-hidden="true" />
           {statusLabel}
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   )
 }

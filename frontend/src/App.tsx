@@ -1,10 +1,15 @@
-import { Route, Routes } from 'react-router-dom'
-import { HomePage } from './pages/HomePage'
+﻿import { Route, Routes } from 'react-router-dom'
+import { Layout } from './components/layout/Layout'
+import { HomePage } from './pages/HomePage/HomePage'
+import { PeoplePage } from './pages/PeoplePage/PeoplePage'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route element={<Layout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/pessoas" element={<PeoplePage />} />
+      </Route>
     </Routes>
   )
 }

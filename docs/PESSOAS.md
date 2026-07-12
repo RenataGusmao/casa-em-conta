@@ -1,4 +1,4 @@
-# Modulo de Pessoas
+﻿# Modulo de Pessoas
 
 ## Objetivo
 
@@ -26,6 +26,55 @@ GET    /api/people/{id}
 POST   /api/people
 DELETE /api/people/{id}
 ```
+
+## Interface
+
+A interface do modulo esta disponivel em:
+
+```text
+/pessoas
+```
+
+A pagina possui formulario de cadastro, listagem, confirmacao de exclusao e mensagens de feedback.
+
+## Fluxo de cadastro
+
+1. Informar nome e idade.
+2. Validar os campos na interface.
+3. Enviar `POST /api/people`.
+4. Recarregar a lista pela API.
+5. Exibir mensagem de sucesso.
+6. Limpar o formulario.
+
+O nome e enviado com `trim`, entao valores como `  Ana Souza  ` sao salvos como `Ana Souza`.
+
+## Validacoes da interface
+
+- Nome obrigatorio.
+- Nome nao pode conter apenas espacos.
+- Nome deve possuir no maximo 150 caracteres.
+- Idade obrigatoria.
+- Idade deve ser numero inteiro.
+- Idade deve estar entre 0 e 120 anos.
+
+As validacoes da interface melhoram a experiencia, mas o back-end continua validando as regras.
+
+## Fluxo de exclusao
+
+1. Clicar em `Excluir` na listagem.
+2. Confirmar ou cancelar no dialogo.
+3. Enviar `DELETE /api/people/{id}` quando confirmado.
+4. Recarregar a lista pela API.
+5. Exibir mensagem de sucesso ou erro.
+
+A mensagem de confirmacao informa que transacoes vinculadas tambem serao removidas quando esse modulo existir.
+
+## Estados da tela
+
+- `Carregando pessoas...` durante a consulta inicial.
+- `Nenhuma pessoa cadastrada.` quando a lista estiver vazia.
+- Mensagem amigavel se a API estiver indisponivel.
+- Botao `Tentar novamente` para repetir a busca.
 
 ## Respostas
 
