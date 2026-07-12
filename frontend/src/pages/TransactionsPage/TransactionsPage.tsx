@@ -73,6 +73,7 @@ export function TransactionsPage() {
 
     try {
       await createTransaction(data)
+      // Após cadastrar, a listagem é buscada novamente para refletir o retorno da API.
       const loadedTransactions = await getTransactions()
       setTransactions(loadedTransactions)
       setFeedback({

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CasaEmConta.Api.Controllers;
 
+/// <summary>
+/// Endpoints de relatórios financeiros da residência.
+/// </summary>
 [ApiController]
 [Route("api/reports")]
 public class ReportsController : ControllerBase
@@ -15,6 +18,9 @@ public class ReportsController : ControllerBase
         _reportService = reportService;
     }
 
+    /// <summary>
+    /// Retorna receitas, despesas e saldo por pessoa, além do total geral.
+    /// </summary>
     [HttpGet("totals")]
     [ProducesResponseType(typeof(TotalsReportResponse), StatusCodes.Status200OK)]
     public async Task<ActionResult<TotalsReportResponse>> GetTotals()

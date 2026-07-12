@@ -1,8 +1,8 @@
-﻿# Modulo de Pessoas
+﻿# Módulo de Pessoas
 
 ## Objetivo
 
-O modulo de pessoas permite cadastrar, listar, buscar e excluir moradores ou participantes associados aos gastos residenciais.
+O módulo de pessoas permite cadastrar, listar, buscar e excluir moradores ou participantes associados aos gastos residenciais.
 
 ## Campos
 
@@ -12,11 +12,13 @@ O modulo de pessoas permite cadastrar, listar, buscar e excluir moradores ou par
 
 ## Regras
 
-- O nome e obrigatorio.
-- O nome nao pode ser vazio nem conter apenas espacos.
-- Espacos no inicio e no final do nome sao removidos no cadastro.
-- O nome deve possuir no maximo 150 caracteres.
-- A idade deve estar entre 0 e 120 anos. O limite de 120 anos e uma validacao da aplicacao para evitar valores claramente invalidos.
+- O nome é obrigatório.
+- O nome não pode ser vazio nem conter apenas espaços.
+- Espaços no início e no final do nome são removidos no cadastro.
+- O nome deve possuir no máximo 150 caracteres.
+- A idade é obrigatória e deve estar entre 0 e 120 anos.
+
+As validações da interface melhoram a experiência, mas o back-end continua protegendo as regras para chamadas diretas à API.
 
 ## Endpoints
 
@@ -29,13 +31,13 @@ DELETE /api/people/{id}
 
 ## Interface
 
-A interface do modulo esta disponivel em:
+A interface do módulo está disponível em:
 
 ```text
 /pessoas
 ```
 
-A pagina possui formulario de cadastro, listagem, confirmacao de exclusao e mensagens de feedback.
+A página possui formulário de cadastro, listagem, confirmação de exclusão e mensagens de feedback.
 
 ## Fluxo de cadastro
 
@@ -44,37 +46,26 @@ A pagina possui formulario de cadastro, listagem, confirmacao de exclusao e mens
 3. Enviar `POST /api/people`.
 4. Recarregar a lista pela API.
 5. Exibir mensagem de sucesso.
-6. Limpar o formulario.
+6. Limpar o formulário.
 
-O nome e enviado com `trim`, entao valores como `  Ana Souza  ` sao salvos como `Ana Souza`.
+O nome é enviado com `trim`, então valores como `  Ana Souza  ` são salvos como `Ana Souza`.
 
-## Validacoes da interface
-
-- Nome obrigatorio.
-- Nome nao pode conter apenas espacos.
-- Nome deve possuir no maximo 150 caracteres.
-- Idade obrigatoria.
-- Idade deve ser numero inteiro.
-- Idade deve estar entre 0 e 120 anos.
-
-As validacoes da interface melhoram a experiencia, mas o back-end continua validando as regras.
-
-## Fluxo de exclusao
+## Fluxo de exclusão
 
 1. Clicar em `Excluir` na listagem.
-2. Confirmar ou cancelar no dialogo.
+2. Confirmar ou cancelar no diálogo.
 3. Enviar `DELETE /api/people/{id}` quando confirmado.
 4. Recarregar a lista pela API.
 5. Exibir mensagem de sucesso ou erro.
 
-A mensagem de confirmacao informa que transacoes vinculadas tambem serao removidas quando esse modulo existir.
+Quando a pessoa possui transações, elas também são removidas por exclusão em cascata.
 
 ## Estados da tela
 
 - `Carregando pessoas...` durante a consulta inicial.
 - `Nenhuma pessoa cadastrada.` quando a lista estiver vazia.
-- Mensagem amigavel se a API estiver indisponivel.
-- Botao `Tentar novamente` para repetir a busca.
+- Mensagem amigável se a API estiver indisponível.
+- Botão `Tentar novamente` para repetir a busca.
 
 ## Respostas
 
@@ -88,7 +79,7 @@ Pessoa cadastrada:
 }
 ```
 
-Pessoa nao encontrada:
+Pessoa não encontrada:
 
 ```json
 {
@@ -96,10 +87,14 @@ Pessoa nao encontrada:
 }
 ```
 
-Dados invalidos:
+Dados inválidos:
 
 ```json
 {
   "message": "O nome é obrigatório."
 }
 ```
+
+## Testes principais
+
+O módulo possui testes automatizados para validações do serviço, endpoints HTTP, cadastro, listagem, busca, exclusão e regras de formulário no front-end.

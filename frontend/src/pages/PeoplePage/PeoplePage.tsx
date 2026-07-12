@@ -47,6 +47,7 @@ export function PeoplePage() {
 
     try {
       await createPerson(data)
+      // Recarrega a lista para refletir a ordenação e os dados definitivos da API.
       await loadPeople()
       setFeedback({ type: 'success', message: 'Pessoa cadastrada com sucesso.' })
     } catch (error) {
@@ -70,6 +71,7 @@ export function PeoplePage() {
     try {
       await deletePerson(personToDelete.id)
       setPersonToDelete(null)
+      // A exclusão pode remover transações em cascata; a lista volta a ser buscada da API.
       await loadPeople()
       setFeedback({ type: 'success', message: 'Pessoa excluída com sucesso.' })
     } catch (error) {

@@ -63,9 +63,9 @@ async function getErrorMessage(response: Response, fallbackMessage: string) {
   try {
     const data = (await response.json()) as ApiErrorResponse
 
+    // Centraliza mensagens amigáveis para evitar detalhes técnicos do fetch na interface.
     return data.message?.trim() || fallbackMessage
   } catch {
     return fallbackMessage
   }
 }
-

@@ -40,6 +40,8 @@ export function TransactionForm({
   const isSelectedPersonMinor = Boolean(selectedPerson && selectedPerson.age < 18)
 
   useEffect(() => {
+    // A restrição melhora a experiência do usuário, mas a regra continua
+    // sendo validada obrigatoriamente pela API.
     if (isSelectedPersonMinor && type === String(TransactionType.Income)) {
       setType(String(TransactionType.Expense))
     }

@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaEmConta.Api.Services;
 
+/// <summary>
+/// Consolida receitas, despesas e saldos por pessoa e no total geral.
+/// </summary>
 public class ReportService : IReportService
 {
     private readonly AppDbContext _context;
@@ -15,8 +18,11 @@ public class ReportService : IReportService
         _context = context;
     }
 
+    /// <inheritdoc />
     public async Task<TotalsReportResponse> GetTotalsAsync()
     {
+        // A consulta parte de People para garantir que pessoas sem transações
+        // também sejam retornadas no relatório com totais zerados.
         var people = await _context.People
             .AsNoTracking()
             .Include(person => person.Transactions)

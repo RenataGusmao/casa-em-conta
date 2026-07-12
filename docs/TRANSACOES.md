@@ -37,14 +37,14 @@ Income  = Receita
 4. A mensagem `Transação cadastrada com sucesso.` é exibida.
 5. A listagem respeita a ordem retornada pela API.
 
-## Validações no front-end
+## Validações
 
 - A descrição é obrigatória.
 - A descrição não pode conter apenas espaços.
 - A descrição deve possuir no máximo 200 caracteres.
 - O valor é obrigatório.
 - O valor deve ser maior que zero.
-- O valor aceita no máximo duas casas decimais.
+- O valor aceita no máximo duas casas decimais na interface.
 - O tipo da transação é obrigatório.
 - A pessoa é obrigatória.
 
@@ -77,7 +77,7 @@ GET  /api/transactions
 POST /api/transactions
 ```
 
-Não foram implementados endpoints de edição ou exclusão individual de transações.
+Não há edição ou exclusão individual de transações no escopo atual.
 
 ## Cadastro
 
@@ -115,7 +115,7 @@ A listagem exibe:
 - tipo;
 - valor formatado em reais.
 
-Receitas e despesas possuem identificação textual visível. Não há botões de editar ou excluir transações nesta etapa.
+Receitas e despesas possuem identificação textual visível. Não há botões de editar ou excluir transações.
 
 ## Tratamento de erros
 
@@ -146,17 +146,4 @@ Ao excluir uma pessoa por `DELETE /api/people/{id}`, todas as transações vincu
 
 ## Testes principais
 
-Foram adicionados testes de back-end para:
-
-- cadastro de despesa para pessoa menor;
-- cadastro de despesa para pessoa adulta;
-- cadastro de receita para pessoa adulta;
-- cadastro de receita para pessoa com exatamente 18 anos;
-- bloqueio de receita para pessoa menor de 18 anos;
-- rejeição de pessoa inexistente;
-- validações de descrição, valor, tipo e pessoa;
-- listagem com `personName`;
-- endpoints de transações;
-- exclusão em cascata ao excluir pessoa.
-
-No front-end, a validação desta etapa é feita por TypeScript, build, lint e testes manuais da interface.
+O módulo possui testes automatizados para validações do serviço, endpoints HTTP, regra de idade, listagem com `personName`, formulário do front-end e listagem formatada em reais.

@@ -1,5 +1,8 @@
 ﻿namespace CasaEmConta.Api.DTOs.Reports;
 
+/// <summary>
+/// Totais financeiros calculados para uma pessoa específica.
+/// </summary>
 public class PersonTotalsResponse
 {
     public int PersonId { get; set; }

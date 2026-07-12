@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaEmConta.Api.Services;
 
+/// <summary>
+/// Aplica as regras de cadastro e consulta de transações.
+/// </summary>
 public class TransactionService : ITransactionService
 {
     private const int MaximumDescriptionLength = 200;
@@ -20,6 +23,7 @@ public class TransactionService : ITransactionService
         _context = context;
     }
 
+    /// <inheritdoc />
     public async Task<IReadOnlyList<TransactionResponse>> GetAllAsync()
     {
         return await _context.Transactions
@@ -30,10 +34,13 @@ public class TransactionService : ITransactionService
             .ToListAsync();
     }
 
+    /// <inheritdoc />
     public async Task<TransactionResponse> CreateAsync(CreateTransactionRequest request)
     {
         var description = request.Description?.Trim() ?? string.Empty;
 
+        // A API mantém as validações de negócio mesmo quando o front-end já
+        // bloqueia entradas inválidas para melhorar a experiência do usuário.
         if (string.IsNullOrWhiteSpace(description))
         {
             throw new DomainValidationException("A descrição é obrigatória.");

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CasaEmConta.Api.Controllers;
 
+/// <summary>
+/// Endpoints para consulta e cadastro de transações.
+/// </summary>
 [ApiController]
 [Route("api/transactions")]
 public class TransactionsController : ControllerBase
@@ -15,6 +18,9 @@ public class TransactionsController : ControllerBase
         _transactionService = transactionService;
     }
 
+    /// <summary>
+    /// Lista as transações cadastradas com o nome da pessoa vinculada.
+    /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<TransactionResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<TransactionResponse>>> GetAll()
@@ -24,6 +30,9 @@ public class TransactionsController : ControllerBase
         return Ok(transactions);
     }
 
+    /// <summary>
+    /// Cadastra uma receita ou despesa respeitando a regra de idade da pessoa.
+    /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(TransactionResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -1,4 +1,4 @@
-using CasaEmConta.Api.Data;
+﻿using CasaEmConta.Api.Data;
 using CasaEmConta.Api.DTOs.People;
 using CasaEmConta.Api.Exceptions;
 using CasaEmConta.Api.Models;
@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaEmConta.Api.Services;
 
+/// <summary>
+/// Aplica as regras de cadastro, consulta e exclusão de pessoas.
+/// </summary>
 public class PersonService : IPersonService
 {
     private const int MaximumNameLength = 150;
@@ -19,6 +22,7 @@ public class PersonService : IPersonService
         _context = context;
     }
 
+    /// <inheritdoc />
     public async Task<IReadOnlyList<PersonResponse>> GetAllAsync()
     {
         return await _context.People
@@ -29,6 +33,7 @@ public class PersonService : IPersonService
             .ToListAsync();
     }
 
+    /// <inheritdoc />
     public async Task<PersonResponse?> GetByIdAsync(int id)
     {
         return await _context.People
@@ -38,10 +43,13 @@ public class PersonService : IPersonService
             .FirstOrDefaultAsync();
     }
 
+    /// <inheritdoc />
     public async Task<PersonResponse> CreateAsync(CreatePersonRequest request)
     {
         var name = request.Name?.Trim() ?? string.Empty;
 
+        // A validação é repetida no serviço porque chamadas diretas à API
+        // podem ignorar as restrições aplicadas pela interface e pelos DTOs.
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new DomainValidationException("O nome é obrigatório.");
@@ -74,6 +82,7 @@ public class PersonService : IPersonService
         return ToResponse(person);
     }
 
+    /// <inheritdoc />
     public async Task<bool> DeleteAsync(int id)
     {
         var person = await _context.People.FindAsync(id);

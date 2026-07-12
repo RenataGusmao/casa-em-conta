@@ -1,9 +1,12 @@
-using CasaEmConta.Api.DTOs.People;
+﻿using CasaEmConta.Api.DTOs.People;
 using CasaEmConta.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CasaEmConta.Api.Controllers;
 
+/// <summary>
+/// Endpoints para cadastro, consulta e exclusão de pessoas.
+/// </summary>
 [ApiController]
 [Route("api/people")]
 public class PeopleController : ControllerBase
@@ -15,6 +18,9 @@ public class PeopleController : ControllerBase
         _personService = personService;
     }
 
+    /// <summary>
+    /// Lista todas as pessoas cadastradas.
+    /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<PersonResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<PersonResponse>>> GetAll()
@@ -24,6 +30,9 @@ public class PeopleController : ControllerBase
         return Ok(people);
     }
 
+    /// <summary>
+    /// Busca uma pessoa pelo identificador.
+    /// </summary>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(PersonResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -39,6 +48,9 @@ public class PeopleController : ControllerBase
         return Ok(person);
     }
 
+    /// <summary>
+    /// Cadastra uma pessoa após validação do DTO e das regras do serviço.
+    /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(PersonResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,6 +61,9 @@ public class PeopleController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = person.Id }, person);
     }
 
+    /// <summary>
+    /// Exclui uma pessoa e suas transações vinculadas por cascata.
+    /// </summary>
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

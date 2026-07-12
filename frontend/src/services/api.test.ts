@@ -23,8 +23,7 @@ describe('apiRequest', () => {
     const result = await apiRequest<{ id: number; name: string }>('people')
 
     expect(result).toEqual({ id: 1, name: 'Ana' })
-    expect(fetchMock.mock.calls[0]?.[0]).toBe(`${apiBaseUrl}/people`)
-    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({ headers: {} })
+    expect(fetchMock).toHaveBeenCalledWith(`${apiBaseUrl}/people`, { headers: {} })
   })
 
   it('trata resposta 204 sem interpretar JSON', async () => {
