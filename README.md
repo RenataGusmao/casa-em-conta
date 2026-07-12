@@ -1,16 +1,16 @@
 ﻿# Casa em Conta
 
-Casa em Conta e um sistema web para controle de gastos residenciais.
+Casa em Conta é um sistema web para controle de gastos residenciais.
 
 ## Status
 
-Esta etapa entrega a estrutura inicial do projeto, o back-end do modulo de pessoas e a interface web para cadastro, listagem e exclusao de pessoas. As funcionalidades de transacoes, totais e autenticacao ainda serao implementadas nas proximas etapas.
+Esta etapa entrega a estrutura inicial do projeto, o módulo de pessoas completo e o módulo de transações com back-end e front-end. A consulta de totais e a autenticação ainda serão implementadas nas próximas etapas.
 
 ## Tecnologias
 
 - .NET 8 com C#
 - ASP.NET Core Web API
-- Entity Framework Core preparado para uso futuro com SQLite
+- Entity Framework Core com SQLite
 - React com TypeScript
 - Vite
 - React Router DOM
@@ -31,7 +31,7 @@ casa-em-conta/
 `-- .editorconfig
 ```
 
-## Pre-requisitos
+## Pré-requisitos
 
 - .NET SDK 8
 - Node.js
@@ -43,19 +43,19 @@ casa-em-conta/
 dotnet restore
 dotnet tool restore
 dotnet tool run dotnet-ef database update --project backend/CasaEmConta.Api/CasaEmConta.Api.csproj --startup-project backend/CasaEmConta.Api/CasaEmConta.Api.csproj
-dotnet run --project backend/CasaEmConta.Api/CasaEmConta.Api.csproj --launch-profile https
+dotnet run --project backend/CasaEmConta.Api
 ```
 
 Swagger:
 
 ```text
-https://localhost:7154/swagger
+http://localhost:5077/swagger
 ```
 
 Health check:
 
 ```text
-https://localhost:7154/api/health
+http://localhost:5077/api/health
 ```
 
 ## Executar o front-end
@@ -68,30 +68,31 @@ npm install
 npm run dev
 ```
 
-O front-end usa a variavel `VITE_API_BASE_URL`. Veja `frontend/.env.example`.
+O front-end usa a variável `VITE_API_BASE_URL`. Veja `frontend/.env.example`.
 
 ```env
-VITE_API_BASE_URL=https://localhost:7154/api
+VITE_API_BASE_URL=http://localhost:5077/api
 ```
 
-A aplicacao abre em:
+Para usar a aplicação, mantenha API e front-end rodando ao mesmo tempo.
+
+A aplicação abre em:
 
 ```text
 http://localhost:5173
 ```
 
-Rotas disponiveis:
+Rotas disponíveis:
 
 ```text
-/         Inicio
-/pessoas  Modulo de pessoas
+/            Início
+/pessoas     Módulo de pessoas
+/transacoes  Módulo de transações
 ```
 
-Para usar a tela de pessoas de ponta a ponta, mantenha a API e o front-end em execucao ao mesmo tempo.
+## Módulo de pessoas
 
-## Modulo de pessoas
-
-O modulo de pessoas esta disponivel na API e no front-end.
+O módulo de pessoas está disponível na API e no front-end.
 
 Endpoints:
 
@@ -102,23 +103,50 @@ POST   /api/people
 DELETE /api/people/{id}
 ```
 
-Funcionalidades concluídas na interface:
+Regras de validação:
 
-- cadastro de pessoa;
-- listagem de pessoas;
-- exclusao com confirmacao;
-- mensagens de sucesso e erro;
-- estado vazio;
-- estado de carregamento;
-- tentativa novamente quando a API nao estiver disponivel.
+- `name` é obrigatório, não pode conter apenas espaços e possui limite de 150 caracteres.
+- `age` é obrigatória e deve estar entre 0 e 120 anos.
+- O identificador é gerado automaticamente pelo banco.
 
-Regras de validacao:
+## Módulo de transações
 
-- `name` e obrigatorio, nao pode conter apenas espacos e possui limite de 150 caracteres.
-- `age` e obrigatoria e deve estar entre 0 e 120 anos.
-- O identificador e gerado automaticamente pelo banco.
+O módulo de transações está disponível na API e no front-end pela rota `/transacoes`.
 
-O banco SQLite local e criado em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. Arquivos `.db`, `.db-shm` e `.db-wal` sao ignorados pelo Git.
+Endpoints:
+
+```text
+GET  /api/transactions
+POST /api/transactions
+```
+
+Campos do formulário:
+
+- descrição;
+- valor;
+- tipo, com as opções Despesa e Receita;
+- pessoa vinculada.
+
+Tipos de transação:
+
+```text
+1 = Expense
+2 = Income
+```
+
+Regras principais:
+
+- `description` é obrigatória, recebe `trim` e possui limite de 200 caracteres.
+- `value` é obrigatório e deve ser maior que zero.
+- `type` aceita somente `Expense` ou `Income`.
+- `personId` é obrigatório e deve apontar para uma pessoa existente.
+- Pessoas menores de 18 anos só podem possuir despesas.
+- Pessoas com 18 anos podem possuir receitas.
+- Ao excluir uma pessoa, suas transações vinculadas são removidas em cascata.
+
+No front-end, a opção Receita fica indisponível ao selecionar uma pessoa menor de 18 anos. A listagem exibe identificador, descrição, pessoa, tipo e valor formatado em reais.
+
+O banco SQLite local é criado em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. Arquivos `.db`, `.db-shm` e `.db-wal` são ignorados pelo Git.
 
 ## Testes
 
@@ -136,6 +164,6 @@ npm run build
 npm run lint
 ```
 
-## Proximas etapas
+## Próximas etapas
 
-Transacoes, totais, telas de edicao e demais regras de negocio ainda nao foram implementados.
+Consulta de totais, edição de transações, autenticação e demais evoluções ainda não foram implementadas.

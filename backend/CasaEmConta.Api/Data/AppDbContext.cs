@@ -1,3 +1,4 @@
+﻿using CasaEmConta.Api.Data.Configurations;
 using CasaEmConta.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Person> People => Set<Person>();
 
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -24,5 +27,7 @@ public class AppDbContext : DbContext
             entity.Property(person => person.Name).IsRequired().HasMaxLength(150);
             entity.Property(person => person.Age).IsRequired();
         });
+
+        modelBuilder.ApplyConfiguration(new TransactionConfiguration());
     }
 }
