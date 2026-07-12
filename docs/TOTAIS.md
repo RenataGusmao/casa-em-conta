@@ -1,6 +1,6 @@
 ﻿# Relatório de totais
 
-O back-end expõe um relatório consolidado de receitas, despesas e saldo por pessoa.
+O sistema expõe um relatório consolidado de receitas, despesas e saldo por pessoa no back-end e uma tela dedicada no front-end.
 
 ## Endpoint
 
@@ -44,4 +44,28 @@ Resposta HTTP esperada:
 - `balance` é calculado como `totalIncome - totalExpense`.
 - `overall` consolida os totais de todas as pessoas retornadas.
 
-O relatório está disponível apenas na API nesta etapa.
+## Interface
+
+A tela fica disponível em:
+
+```text
+/totais
+```
+
+Fluxo da interface:
+
+- ao abrir a página, o front-end busca `GET /reports/totals` usando `VITE_API_BASE_URL`;
+- enquanto a consulta está em andamento, exibe `Carregando totais...`;
+- quando há pessoas, exibe uma tabela com Pessoa, Receitas, Despesas e Saldo;
+- ao final, exibe o Total geral em um painel separado;
+- o botão `Atualizar` refaz a consulta manualmente e fica desabilitado durante o carregamento;
+- quando não há pessoas, exibe o estado vazio com link para `/pessoas`;
+- quando a API está indisponível ou retorna erro, exibe mensagem em português e permite tentar novamente.
+
+## Formatação monetária
+
+Todos os valores são formatados com `Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" })` por meio do utilitário `frontend/src/utils/currency.ts`.
+
+## Saldos
+
+A interface diferencia saldo positivo, negativo e zerado com classe visual e texto explícito, sem depender apenas de cor.

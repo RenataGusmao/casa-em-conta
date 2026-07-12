@@ -4,7 +4,7 @@ Casa em Conta é um sistema web para controle de gastos residenciais.
 
 ## Status
 
-Esta etapa entrega a estrutura inicial do projeto, o módulo de pessoas completo, o módulo de transações com back-end e front-end e a consulta de totais no back-end. A autenticação ainda será implementada nas próximas etapas.
+Esta etapa entrega a estrutura inicial do projeto, o módulo de pessoas completo, o módulo de transações com back-end e front-end e a consulta de totais com back-end e front-end. A autenticação ainda será implementada nas próximas etapas.
 
 ## Tecnologias
 
@@ -88,6 +88,7 @@ Rotas disponíveis:
 /            Início
 /pessoas     Módulo de pessoas
 /transacoes  Módulo de transações
+/totais      Consulta de totais
 ```
 
 ## Módulo de pessoas
@@ -148,7 +149,7 @@ No front-end, a opção Receita fica indisponível ao selecionar uma pessoa meno
 
 ## Relatório de totais
 
-A API disponibiliza o relatório de totais por pessoa e consolidado geral.
+A consulta de totais está disponível na API e no front-end pela rota `/totais`.
 
 Endpoint:
 
@@ -156,15 +157,17 @@ Endpoint:
 GET /api/reports/totals
 ```
 
-Regras principais:
+Dados exibidos no front-end:
 
-- pessoas sem transações são retornadas com totais zerados;
-- receitas (`Income`) compõem `totalIncome`;
-- despesas (`Expense`) compõem `totalExpense`;
-- saldo (`balance`) é calculado como receita menos despesa;
-- o consolidado geral fica em `overall`.
+- receitas, despesas e saldo por pessoa;
+- pessoas sem transações com valores zerados;
+- receitas gerais, despesas gerais e saldo líquido geral;
+- valores formatados em reais;
+- botão `Atualizar` para refazer a consulta manualmente;
+- estado vazio quando não há pessoas cadastradas;
+- mensagem amigável quando a API está indisponível.
 
-Detalhes adicionais estão em `docs/TOTAIS.md`. A tela de totais no front-end ainda não foi implementada.
+Para usar a tela de totais, mantenha API e front-end rodando simultaneamente. Detalhes adicionais estão em `docs/TOTAIS.md`.
 
 O banco SQLite local é criado em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. Arquivos `.db`, `.db-shm` e `.db-wal` são ignorados pelo Git.
 
@@ -186,4 +189,4 @@ npm run lint
 
 ## Próximas etapas
 
-Tela de totais no front-end, edição de transações, autenticação e demais evoluções ainda não foram implementadas.
+Edição de transações, autenticação e demais evoluções ainda não foram implementadas.
