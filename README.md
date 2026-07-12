@@ -4,7 +4,7 @@ Casa em Conta é um sistema web para controle de gastos residenciais.
 
 ## Status
 
-Esta etapa entrega a estrutura inicial do projeto, o módulo de pessoas completo e o módulo de transações com back-end e front-end. A consulta de totais e a autenticação ainda serão implementadas nas próximas etapas.
+Esta etapa entrega a estrutura inicial do projeto, o módulo de pessoas completo, o módulo de transações com back-end e front-end e a consulta de totais no back-end. A autenticação ainda será implementada nas próximas etapas.
 
 ## Tecnologias
 
@@ -146,6 +146,26 @@ Regras principais:
 
 No front-end, a opção Receita fica indisponível ao selecionar uma pessoa menor de 18 anos. A listagem exibe identificador, descrição, pessoa, tipo e valor formatado em reais.
 
+## Relatório de totais
+
+A API disponibiliza o relatório de totais por pessoa e consolidado geral.
+
+Endpoint:
+
+```text
+GET /api/reports/totals
+```
+
+Regras principais:
+
+- pessoas sem transações são retornadas com totais zerados;
+- receitas (`Income`) compõem `totalIncome`;
+- despesas (`Expense`) compõem `totalExpense`;
+- saldo (`balance`) é calculado como receita menos despesa;
+- o consolidado geral fica em `overall`.
+
+Detalhes adicionais estão em `docs/TOTAIS.md`. A tela de totais no front-end ainda não foi implementada.
+
 O banco SQLite local é criado em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. Arquivos `.db`, `.db-shm` e `.db-wal` são ignorados pelo Git.
 
 ## Testes
@@ -166,4 +186,4 @@ npm run lint
 
 ## Próximas etapas
 
-Consulta de totais, edição de transações, autenticação e demais evoluções ainda não foram implementadas.
+Tela de totais no front-end, edição de transações, autenticação e demais evoluções ainda não foram implementadas.
