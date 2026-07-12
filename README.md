@@ -190,3 +190,4 @@ npm run lint
 ## Próximas etapas
 
 Edição de transações, autenticação e demais evoluções ainda não foram implementadas.
+Detalhes da estratégia de testes estão em docs/TESTES.md.
