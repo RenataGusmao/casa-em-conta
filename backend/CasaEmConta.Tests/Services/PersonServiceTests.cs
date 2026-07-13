@@ -1,4 +1,4 @@
-using CasaEmConta.Api.Data;
+﻿using CasaEmConta.Api.Data;
 using CasaEmConta.Api.DTOs.People;
 using CasaEmConta.Api.Exceptions;
 using CasaEmConta.Api.Models;
@@ -112,9 +112,9 @@ public class PersonServiceTests
     {
         await using var database = await CreateDatabaseAsync();
         database.Context.People.AddRange(
-            new Person { Name = "Bruno", Age = 31 },
-            new Person { Name = "Ana", Age = 28 },
-            new Person { Name = "Ana", Age = 30 });
+            new Person { Name = "Carlos Lima", Age = 31 },
+            new Person { Name = "Ana Ribeiro", Age = 28 },
+            new Person { Name = "Ana Ribeiro", Age = 30 });
         await database.Context.SaveChangesAsync();
 
         var service = new PersonService(database.Context);
@@ -123,9 +123,9 @@ public class PersonServiceTests
 
         Assert.Collection(
             people,
-            person => Assert.Equal("Ana", person.Name),
-            person => Assert.Equal("Ana", person.Name),
-            person => Assert.Equal("Bruno", person.Name));
+            person => Assert.Equal("Ana Ribeiro", person.Name),
+            person => Assert.Equal("Ana Ribeiro", person.Name),
+            person => Assert.Equal("Carlos Lima", person.Name));
         Assert.True(people[0].Id < people[1].Id);
     }
 
@@ -133,7 +133,7 @@ public class PersonServiceTests
     public async Task GetByIdAsync_WhenPersonExists_ReturnsPerson()
     {
         await using var database = await CreateDatabaseAsync();
-        var existing = new Person { Name = "Ana", Age = 28 };
+        var existing = new Person { Name = "Mariana Freitas", Age = 28 };
         database.Context.People.Add(existing);
         await database.Context.SaveChangesAsync();
 
@@ -143,7 +143,7 @@ public class PersonServiceTests
 
         Assert.NotNull(person);
         Assert.Equal(existing.Id, person.Id);
-        Assert.Equal("Ana", person.Name);
+        Assert.Equal("Mariana Freitas", person.Name);
     }
 
     [Fact]
@@ -161,7 +161,7 @@ public class PersonServiceTests
     public async Task DeleteAsync_WhenPersonExists_ReturnsTrue()
     {
         await using var database = await CreateDatabaseAsync();
-        var existing = new Person { Name = "Ana", Age = 28 };
+        var existing = new Person { Name = "Mariana Freitas", Age = 28 };
         database.Context.People.Add(existing);
         await database.Context.SaveChangesAsync();
 

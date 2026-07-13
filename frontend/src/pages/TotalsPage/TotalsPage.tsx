@@ -16,6 +16,7 @@ export function TotalsPage() {
   const [feedback, setFeedback] = useState<Feedback | null>(null)
 
   const loadTotals = useCallback(async () => {
+    // Os totais podem mudar após novos cadastros, por isso a página permite atualização manual.
     setIsLoading(true)
     setFeedback(null)
 

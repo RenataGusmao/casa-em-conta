@@ -5,8 +5,8 @@ import { PeopleList } from './PeopleList'
 import type { Person } from '../../types/person'
 
 const people: Person[] = [
-  { id: 1, name: 'Ana', age: 28 },
-  { id: 2, name: 'Bruno', age: 17 },
+  { id: 1, name: 'Mariana Freitas', age: 28 },
+  { id: 2, name: 'Lucas Almeida', age: 17 },
 ]
 
 describe('PeopleList', () => {
@@ -14,10 +14,10 @@ describe('PeopleList', () => {
     render(<PeopleList people={people} deletingPersonId={null} onDeleteClick={vi.fn()} />)
 
     expect(screen.getByText('1')).toBeInTheDocument()
-    expect(screen.getByText('Ana')).toBeInTheDocument()
+    expect(screen.getByText('Mariana Freitas')).toBeInTheDocument()
     expect(screen.getByText('28')).toBeInTheDocument()
     expect(screen.getByText('2')).toBeInTheDocument()
-    expect(screen.getByText('Bruno')).toBeInTheDocument()
+    expect(screen.getByText('Lucas Almeida')).toBeInTheDocument()
     expect(screen.getByText('17')).toBeInTheDocument()
   })
 

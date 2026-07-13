@@ -2,6 +2,9 @@
 
 namespace CasaEmConta.Api.Middleware;
 
+/// <summary>
+/// Converte exceções conhecidas em respostas HTTP seguras e padronizadas.
+/// </summary>
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -13,6 +16,9 @@ public class ExceptionHandlingMiddleware
         _logger = logger;
     }
 
+    /// <summary>
+    /// Executa a requisição e impede que erros inesperados exponham detalhes técnicos.
+    /// </summary>
     public async Task InvokeAsync(HttpContext context)
     {
         try

@@ -14,11 +14,13 @@ builder.Logging.AddDebug();
 
 const string frontendCorsPolicy = "Frontend";
 var configuredConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("A connection string 'DefaultConnection' nÃ£o foi configurada.");
+    ?? throw new InvalidOperationException("A connection string 'DefaultConnection' não foi configurada.");
 
 var sqliteConnectionString = new SqliteConnectionStringBuilder(configuredConnectionString);
 if (!Path.IsPathRooted(sqliteConnectionString.DataSource))
 {
+    // Resolve o banco a partir da pasta da API para manter o SQLite no mesmo local,
+    // mesmo quando o comando é executado pela raiz da solução ou por outro terminal.
     sqliteConnectionString.DataSource = Path.Combine(builder.Environment.ContentRootPath, sqliteConnectionString.DataSource);
 }
 
@@ -32,7 +34,7 @@ builder.Services.AddControllers()
             var message = context.ModelState.Values
                 .SelectMany(entry => entry.Errors)
                 .Select(error => error.ErrorMessage)
-                .FirstOrDefault() ?? "A requisiÃ§Ã£o possui dados invÃ¡lidos.";
+                .FirstOrDefault() ?? "A requisição possui dados inválidos.";
 
             return new BadRequestObjectResult(new { message });
         };
@@ -76,10 +78,3 @@ app.Run();
 public partial class Program
 {
 }
-
-
-
-
-
-
-

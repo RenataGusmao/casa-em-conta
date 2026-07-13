@@ -20,6 +20,7 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
             .HasOne(transaction => transaction.Person)
             .WithMany(person => person.Transactions)
             .HasForeignKey(transaction => transaction.PersonId)
+            // A exclusão em cascata impede que transações permaneçam sem pessoa associada.
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

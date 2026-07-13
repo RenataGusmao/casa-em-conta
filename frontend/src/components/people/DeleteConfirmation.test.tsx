@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { DeleteConfirmation } from './DeleteConfirmation'
 
-const person = { id: 1, name: 'Ana', age: 28 }
+const person = { id: 1, name: 'Mariana Freitas', age: 28 }
 
 describe('DeleteConfirmation', () => {
   it('exibe modal acessível com nome e ações', () => {
@@ -17,7 +17,7 @@ describe('DeleteConfirmation', () => {
     )
 
     expect(screen.getByRole('dialog', { name: 'Excluir pessoa' })).toBeInTheDocument()
-    expect(screen.getByText(/Deseja excluir Ana/)).toBeInTheDocument()
+    expect(screen.getByText(/Deseja excluir Mariana Freitas/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Cancelar' })).toHaveFocus()
     expect(screen.getByRole('button', { name: 'Confirmar exclusão' })).toBeInTheDocument()
   })

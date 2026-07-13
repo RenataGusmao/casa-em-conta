@@ -27,14 +27,14 @@ public class ReportServiceTests
     public async Task GetTotalsAsync_IncludesPersonWithoutTransactionsWithZeroTotals()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new ReportService(database.Context);
 
         var report = await service.GetTotalsAsync();
 
         var personTotals = Assert.Single(report.People);
         Assert.Equal(person.Id, personTotals.PersonId);
-        Assert.Equal("Ana", personTotals.PersonName);
+        Assert.Equal("Mariana Freitas", personTotals.PersonName);
         Assert.Equal(0m, personTotals.TotalIncome);
         Assert.Equal(0m, personTotals.TotalExpense);
         Assert.Equal(0m, personTotals.Balance);
@@ -44,7 +44,7 @@ public class ReportServiceTests
     public async Task GetTotalsAsync_WithOnlyIncome_CalculatesPositiveBalance()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Income, 1000.25m);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Income, 200.10m);
         var service = new ReportService(database.Context);
@@ -61,7 +61,7 @@ public class ReportServiceTests
     public async Task GetTotalsAsync_WithOnlyExpense_CalculatesNegativeBalance()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Expense, 75.40m);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Expense, 24.60m);
         var service = new ReportService(database.Context);
@@ -78,7 +78,7 @@ public class ReportServiceTests
     public async Task GetTotalsAsync_WithMixedTransactions_CalculatesZeroBalance()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Income, 150m);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Expense, 50m);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Expense, 100m);
@@ -96,12 +96,12 @@ public class ReportServiceTests
     public async Task GetTotalsAsync_CalculatesOverallTotalsAcrossPeople()
     {
         await using var database = await CreateDatabaseAsync();
-        var ana = await AddPersonAsync(database.Context, "Ana", 28);
-        var bruno = await AddPersonAsync(database.Context, "Bruno", 35);
-        await AddTransactionAsync(database.Context, ana.Id, TransactionType.Income, 1000m);
-        await AddTransactionAsync(database.Context, ana.Id, TransactionType.Expense, 250m);
-        await AddTransactionAsync(database.Context, bruno.Id, TransactionType.Income, 500m);
-        await AddTransactionAsync(database.Context, bruno.Id, TransactionType.Expense, 750m);
+        var mariana = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
+        var carlos = await AddPersonAsync(database.Context, "Carlos Lima", 35);
+        await AddTransactionAsync(database.Context, mariana.Id, TransactionType.Income, 1000m);
+        await AddTransactionAsync(database.Context, mariana.Id, TransactionType.Expense, 250m);
+        await AddTransactionAsync(database.Context, carlos.Id, TransactionType.Income, 500m);
+        await AddTransactionAsync(database.Context, carlos.Id, TransactionType.Expense, 750m);
         var service = new ReportService(database.Context);
 
         var report = await service.GetTotalsAsync();
@@ -115,25 +115,25 @@ public class ReportServiceTests
     public async Task GetTotalsAsync_OrdersPeopleByNameThenId()
     {
         await using var database = await CreateDatabaseAsync();
-        var firstAna = await AddPersonAsync(database.Context, "Ana", 28);
-        var bruno = await AddPersonAsync(database.Context, "Bruno", 35);
-        var secondAna = await AddPersonAsync(database.Context, "Ana", 40);
+        var firstAnaRibeiro = await AddPersonAsync(database.Context, "Ana Ribeiro", 28);
+        var carlos = await AddPersonAsync(database.Context, "Carlos Lima", 35);
+        var secondAnaRibeiro = await AddPersonAsync(database.Context, "Ana Ribeiro", 40);
         var service = new ReportService(database.Context);
 
         var report = await service.GetTotalsAsync();
 
         Assert.Collection(
             report.People,
-            person => Assert.Equal(firstAna.Id, person.PersonId),
-            person => Assert.Equal(secondAna.Id, person.PersonId),
-            person => Assert.Equal(bruno.Id, person.PersonId));
+            person => Assert.Equal(firstAnaRibeiro.Id, person.PersonId),
+            person => Assert.Equal(secondAnaRibeiro.Id, person.PersonId),
+            person => Assert.Equal(carlos.Id, person.PersonId));
     }
 
     [Fact]
     public async Task GetTotalsAsync_DistinguishesIncomeAndExpenseTypes()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Income, 300m);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Expense, 100m);
         var service = new ReportService(database.Context);
@@ -150,7 +150,7 @@ public class ReportServiceTests
     public async Task GetTotalsAsync_UsesDecimalCalculations()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Income, 0.30m);
         await AddTransactionAsync(database.Context, person.Id, TransactionType.Expense, 0.10m);
         var service = new ReportService(database.Context);
@@ -181,7 +181,7 @@ public class ReportServiceTests
     {
         var transaction = new Transaction
         {
-            Description = $"Transação {type}",
+            Description = type == TransactionType.Income ? "Salário mensal" : "Conta de energia",
             Value = value,
             Type = type,
             PersonId = personId
