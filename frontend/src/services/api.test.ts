@@ -92,7 +92,7 @@ describe('apiRequest', () => {
       }),
     )
 
-    await expect(apiRequest('people')).rejects.toThrow('Não foi possível conectar à API.')
+    await expect(apiRequest('people')).rejects.toThrow('Não foi possível conectar ao serviço.')
     await expect(apiRequest('people')).rejects.not.toThrow('Failed to fetch')
   })
 })

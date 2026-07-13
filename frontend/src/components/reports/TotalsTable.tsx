@@ -33,12 +33,15 @@ export function TotalsTable({ people }: TotalsTableProps) {
         <tbody>
           {people.map((person) => (
             <tr key={person.personId}>
-              <td>{person.personName}</td>
-              <td>{formatCurrency(person.totalIncome)}</td>
-              <td>{formatCurrency(person.totalExpense)}</td>
               <td>
+                <strong className="table-primary-text">{person.personName}</strong>
+              </td>
+              <td className="table-money">{formatCurrency(person.totalIncome)}</td>
+              <td className="table-money">{formatCurrency(person.totalExpense)}</td>
+              <td className="table-money">
                 <span className={`balance-value ${getBalanceClass(person.balance)}`}>
-                  {getBalanceLabel(person.balance)}: {formatCurrency(person.balance)}
+                  <span className="balance-value__label">{getBalanceLabel(person.balance)}</span>
+                  {formatCurrency(person.balance)}
                 </span>
               </td>
             </tr>
@@ -63,12 +66,12 @@ function getBalanceClass(balance: number) {
 
 function getBalanceLabel(balance: number) {
   if (balance > 0) {
-    return 'Positivo'
+    return 'Sobra'
   }
 
   if (balance < 0) {
-    return 'Negativo'
+    return 'Falta'
   }
 
-  return 'Zerado'
+  return 'Em dia'
 }

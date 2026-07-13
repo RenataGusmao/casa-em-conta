@@ -10,23 +10,24 @@ export function OverallTotals({ overall }: OverallTotalsProps) {
     <section className="overall-totals" aria-labelledby="overall-totals-title">
       <div className="overall-totals__heading">
         <h2 id="overall-totals-title">Total geral</h2>
-        <p>Consolidado de todas as pessoas cadastradas.</p>
+        <p>Resultado consolidado da residência.</p>
       </div>
 
       <dl className="overall-totals__grid">
         <div className="overall-totals__item">
-          <dt>Receitas gerais</dt>
+          <dt>Receitas</dt>
           <dd>{formatCurrency(overall.totalIncome)}</dd>
         </div>
         <div className="overall-totals__item">
-          <dt>Despesas gerais</dt>
+          <dt>Despesas</dt>
           <dd>{formatCurrency(overall.totalExpense)}</dd>
         </div>
         <div className="overall-totals__item overall-totals__item--balance">
           <dt>Saldo líquido</dt>
           <dd>
             <span className={`balance-value ${getBalanceClass(overall.balance)}`}>
-              {getBalanceLabel(overall.balance)}: {formatCurrency(overall.balance)}
+              <span className="balance-value__label">{getBalanceLabel(overall.balance)}</span>
+              {formatCurrency(overall.balance)}
             </span>
           </dd>
         </div>
@@ -49,12 +50,12 @@ function getBalanceClass(balance: number) {
 
 function getBalanceLabel(balance: number) {
   if (balance > 0) {
-    return 'Positivo'
+    return 'Sobra'
   }
 
   if (balance < 0) {
-    return 'Negativo'
+    return 'Falta'
   }
 
-  return 'Zerado'
+  return 'Em dia'
 }

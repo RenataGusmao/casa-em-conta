@@ -45,7 +45,7 @@ describe('TotalsTable', () => {
     expect(screen.getByText('Ana Ribeiro')).toBeInTheDocument()
     expect(screen.getByText('R$ 3.000,00')).toBeInTheDocument()
     expect(screen.getByText('R$ 500,00')).toBeInTheDocument()
-    expect(screen.getByText('Positivo: R$ 2.500,00')).toBeInTheDocument()
+    expect(screen.getByText('Sobra').closest('.balance-value')).toHaveTextContent('R$ 2.500,00')
   })
 
   it('exibe pessoa sem transações com valores zerados', () => {
@@ -55,19 +55,19 @@ describe('TotalsTable', () => {
 
     expect(anaRibeiroRow).not.toBeNull()
     expect(anaRibeiroRow).toHaveTextContent('R$ 0,00')
-    expect(anaRibeiroRow).toHaveTextContent('Zerado: R$ 0,00')
+    expect(anaRibeiroRow).toHaveTextContent('Em dia')
   })
 
   it('exibe saldo negativo com texto e sinal', () => {
     render(<TotalsTable people={people} />, { wrapper: MemoryRouter })
 
-    expect(screen.getByText('Negativo: -R$ 120,00')).toBeInTheDocument()
+    expect(screen.getByText('Falta').closest('.balance-value')).toHaveTextContent('-R$ 120,00')
   })
 
   it('exibe saldo zero com texto claro', () => {
     render(<TotalsTable people={people} />, { wrapper: MemoryRouter })
 
-    expect(screen.getAllByText('Zerado: R$ 0,00')).toHaveLength(2)
+    expect(screen.getAllByText('Em dia')).toHaveLength(2)
   })
 
   it('exibe estado vazio com acesso à página de pessoas', () => {

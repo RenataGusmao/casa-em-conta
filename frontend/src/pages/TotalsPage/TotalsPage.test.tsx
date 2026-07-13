@@ -55,20 +55,21 @@ describe('TotalsPage', () => {
 
     expect(await screen.findByText('Mariana Freitas')).toBeInTheDocument()
     expect(screen.getAllByText('R$ 1.000,00')).toHaveLength(2)
-    expect(screen.getAllByText('Positivo: R$ 750,00')).toHaveLength(2)
+    expect(screen.getAllByText('Sobra')).toHaveLength(2)
+    expect(screen.getAllByText('R$ 750,00')).toHaveLength(2)
   })
 
   it('exibe erro amigável e tenta novamente', async () => {
     const user = userEvent.setup()
     vi.mocked(getTotalsReport)
-      .mockRejectedValueOnce(new Error('Não foi possível conectar à API.'))
+      .mockRejectedValueOnce(new Error('Não foi possível conectar ao serviço.'))
       .mockResolvedValueOnce(report)
 
     renderPage()
 
-    expect(await screen.findByText('Não foi possível conectar à API.')).toBeInTheDocument()
+    expect(await screen.findByText('Não foi possível conectar ao serviço.')).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Atualizar' }))
+    await user.click(screen.getByRole('button', { name: 'Tentar novamente' }))
 
     expect(await screen.findByText('Mariana Freitas')).toBeInTheDocument()
     expect(getTotalsReport).toHaveBeenCalledTimes(2)

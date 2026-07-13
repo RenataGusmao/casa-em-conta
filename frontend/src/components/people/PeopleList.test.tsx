@@ -13,12 +13,12 @@ describe('PeopleList', () => {
   it('exibe identificador, nome e idade das pessoas', () => {
     render(<PeopleList people={people} deletingPersonId={null} onDeleteClick={vi.fn()} />)
 
-    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByText('#1')).toBeInTheDocument()
     expect(screen.getByText('Mariana Freitas')).toBeInTheDocument()
-    expect(screen.getByText('28')).toBeInTheDocument()
-    expect(screen.getByText('2')).toBeInTheDocument()
+    expect(screen.getByText('28 anos')).toBeInTheDocument()
+    expect(screen.getByText('#2')).toBeInTheDocument()
     expect(screen.getByText('Lucas Almeida')).toBeInTheDocument()
-    expect(screen.getByText('17')).toBeInTheDocument()
+    expect(screen.getByText('17 anos')).toBeInTheDocument()
   })
 
   it('chama a ação de exclusão', async () => {
@@ -35,6 +35,6 @@ describe('PeopleList', () => {
     render(<PeopleList people={[]} deletingPersonId={null} onDeleteClick={vi.fn()} />)
 
     expect(screen.getByText('Nenhuma pessoa cadastrada.')).toBeInTheDocument()
-    expect(screen.getByText('Utilize o formulário acima para cadastrar a primeira pessoa.')).toBeInTheDocument()
+    expect(screen.getByText('Inclua a primeira pessoa para começar o controle da residência.')).toBeInTheDocument()
   })
 })

@@ -17,7 +17,7 @@ export const apiBaseUrl = normalizeBaseUrl(
 export async function apiRequest<T>(
   path: string,
   options?: RequestInit,
-  fallbackMessage = 'Não foi possível conectar à API.',
+  fallbackMessage = 'Não foi possível conectar ao serviço.',
 ): Promise<T> {
   let response: Response
 
@@ -30,7 +30,7 @@ export async function apiRequest<T>(
       },
     })
   } catch {
-    throw new Error('Não foi possível conectar à API.')
+    throw new Error('Não foi possível conectar ao serviço.')
   }
 
   if (!response.ok) {
@@ -48,7 +48,7 @@ export function getHealth(): Promise<HealthResponse> {
   return apiRequest<HealthResponse>(
     'health',
     undefined,
-    'Não foi possível conectar à API.',
+    'Não foi possível conectar ao serviço.',
   )
 }
 

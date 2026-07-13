@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FeedbackMessage } from '../../components/feedback/FeedbackMessage'
 import { OverallTotals } from '../../components/reports/OverallTotals'
 import { TotalsTable } from '../../components/reports/TotalsTable'
@@ -41,9 +41,9 @@ export function TotalsPage() {
   return (
     <section className="page-section">
       <div className="page-heading">
-        <p className="eyebrow">Consulta de totais</p>
+        <p className="eyebrow">Resumo financeiro</p>
         <h1>Totais</h1>
-        <p>Consulte receitas, despesas e saldos de cada pessoa da residência.</p>
+        <p>Veja como receitas e despesas se distribuem entre as pessoas da residência.</p>
       </div>
 
       {feedback ? (
@@ -54,11 +54,11 @@ export function TotalsPage() {
         />
       ) : null}
 
-      <section className="panel" aria-labelledby="totals-list-title">
+      <section className="panel panel--data panel--totals" aria-labelledby="totals-list-title">
         <div className="section-header">
           <div>
             <h2 id="totals-list-title">Totais por pessoa</h2>
-            <p>Todas as pessoas retornadas pela API aparecem nesta listagem.</p>
+            <p>Pessoas sem lançamentos também aparecem para facilitar o acompanhamento.</p>
           </div>
           <button
             type="button"
@@ -76,13 +76,13 @@ export function TotalsPage() {
           </p>
         ) : report ? (
           <div className="totals-content">
-            <TotalsTable people={report.people} />
             <OverallTotals overall={report.overall} />
+            <TotalsTable people={report.people} />
           </div>
         ) : (
           <div className="empty-state" aria-live="polite">
             <strong>Não foi possível carregar os totais.</strong>
-            <p>Confira se a API está em execução e tente novamente.</p>
+            <p>Confira se o serviço está em execução e tente novamente.</p>
             <button
               type="button"
               className="button button--secondary empty-state__action"

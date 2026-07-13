@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import type { Person } from '../../types/person'
@@ -23,6 +23,10 @@ type ValidationResult = {
   errors: FormErrors
   data: CreateTransactionRequest | null
 }
+
+type ParsedCurrency =
+  | { isValid: true; value: number }
+  | { isValid: false; reason: 'empty' | 'format' | 'decimalPlaces' | 'nonPositive' }
 
 export function TransactionForm({
   isSubmitting,
@@ -74,17 +78,18 @@ export function TransactionForm({
   if (people.length === 0) {
     return (
       <div className="empty-state">
-        <strong>Cadastre uma pessoa antes de registrar uma transação.</strong>
-        <p>
-          Acesse o módulo de pessoas para incluir quem participará do controle da
-          residência.
-        </p>
-        <Link to="/pessoas" className="button button--secondary">
+        <strong>Cadastre uma pessoa para começar.</strong>
+        <p>Depois disso, você poderá registrar receitas e despesas para ela.</p>
+        <Link to="/pessoas" className="button button--secondary empty-state__action">
           Ir para pessoas
         </Link>
       </div>
     )
   }
+
+  const valueDescription = errors.value
+    ? 'transaction-value-help transaction-value-error'
+    : 'transaction-value-help'
 
   return (
     <form className="transaction-form" onSubmit={handleSubmit} noValidate>
@@ -97,6 +102,7 @@ export function TransactionForm({
             type="text"
             value={description}
             maxLength={240}
+            placeholder="Ex.: Conta de energia"
             disabled={isSubmitting || isDisabled}
             aria-describedby={
               errors.description ? 'transaction-description-error' : undefined
@@ -113,17 +119,26 @@ export function TransactionForm({
 
         <div className="form-field">
           <label htmlFor="transaction-value">Valor</label>
-          <input
-            id="transaction-value"
-            name="value"
-            type="text"
-            inputMode="decimal"
-            value={value}
-            disabled={isSubmitting || isDisabled}
-            aria-describedby={errors.value ? 'transaction-value-error' : undefined}
-            aria-invalid={Boolean(errors.value)}
-            onChange={(event) => setValue(event.target.value)}
-          />
+          <div className="money-input">
+            <span className="money-input__prefix" aria-hidden="true">
+              R$
+            </span>
+            <input
+              id="transaction-value"
+              name="value"
+              type="text"
+              inputMode="decimal"
+              value={value}
+              placeholder="Ex.: 6.500,00"
+              disabled={isSubmitting || isDisabled}
+              aria-describedby={valueDescription}
+              aria-invalid={Boolean(errors.value)}
+              onChange={(event) => setValue(event.target.value)}
+            />
+          </div>
+          <span id="transaction-value-help" className="field-hint">
+            Aceita vírgula e ponto de milhar. O prefixo não precisa ser digitado.
+          </span>
           {errors.value ? (
             <span id="transaction-value-error" className="field-error">
               {errors.value}
@@ -133,21 +148,23 @@ export function TransactionForm({
 
         <div className="form-field">
           <label htmlFor="transaction-type">Tipo</label>
-          <select
-            id="transaction-type"
-            name="type"
-            value={type}
-            disabled={isSubmitting || isDisabled}
-            aria-describedby={errors.type ? 'transaction-type-error' : undefined}
-            aria-invalid={Boolean(errors.type)}
-            onChange={(event) => setType(event.target.value)}
-          >
-            <option value="">Selecione o tipo</option>
-            <option value={TransactionType.Expense}>Despesa</option>
-            <option value={TransactionType.Income} disabled={isSelectedPersonMinor}>
-              Receita
-            </option>
-          </select>
+          <div className="select-control">
+            <select
+              id="transaction-type"
+              name="type"
+              value={type}
+              disabled={isSubmitting || isDisabled}
+              aria-describedby={errors.type ? 'transaction-type-error' : undefined}
+              aria-invalid={Boolean(errors.type)}
+              onChange={(event) => setType(event.target.value)}
+            >
+              <option value="">Selecione o tipo</option>
+              <option value={TransactionType.Expense}>Despesa</option>
+              <option value={TransactionType.Income} disabled={isSelectedPersonMinor}>
+                Receita
+              </option>
+            </select>
+          </div>
           {errors.type ? (
             <span id="transaction-type-error" className="field-error">
               {errors.type}
@@ -157,29 +174,31 @@ export function TransactionForm({
 
         <div className="form-field form-field--wide">
           <label htmlFor="transaction-person">Pessoa</label>
-          <select
-            id="transaction-person"
-            name="personId"
-            value={personId}
-            disabled={isSubmitting || isDisabled}
-            aria-describedby={
-              [
-                errors.personId ? 'transaction-person-error' : null,
-                isSelectedPersonMinor ? 'transaction-minor-hint' : null,
-              ]
-                .filter(Boolean)
-                .join(' ') || undefined
-            }
-            aria-invalid={Boolean(errors.personId)}
-            onChange={(event) => setPersonId(event.target.value)}
-          >
-            <option value="">Selecione uma pessoa</option>
-            {people.map((person) => (
-              <option key={person.id} value={person.id}>
-                {person.name} — {person.age} anos
-              </option>
-            ))}
-          </select>
+          <div className="select-control">
+            <select
+              id="transaction-person"
+              name="personId"
+              value={personId}
+              disabled={isSubmitting || isDisabled}
+              aria-describedby={
+                [
+                  errors.personId ? 'transaction-person-error' : null,
+                  isSelectedPersonMinor ? 'transaction-minor-hint' : null,
+                ]
+                  .filter(Boolean)
+                  .join(' ') || undefined
+              }
+              aria-invalid={Boolean(errors.personId)}
+              onChange={(event) => setPersonId(event.target.value)}
+            >
+              <option value="">Selecione uma pessoa</option>
+              {people.map((person) => (
+                <option key={person.id} value={person.id}>
+                  {person.name} - {person.age} anos
+                </option>
+              ))}
+            </select>
+          </div>
           {errors.personId ? (
             <span id="transaction-person-error" className="field-error">
               {errors.personId}
@@ -187,19 +206,21 @@ export function TransactionForm({
           ) : null}
           {isSelectedPersonMinor ? (
             <span id="transaction-minor-hint" className="field-hint" aria-live="polite">
-              Pessoas menores de 18 anos só podem possuir despesas.
+              Para menores de 18 anos, registre apenas despesas.
             </span>
           ) : null}
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="button button--primary"
-        disabled={isSubmitting || isDisabled}
-      >
-        {isSubmitting ? 'Cadastrando...' : 'Cadastrar transação'}
-      </button>
+      <div className="form-actions">
+        <button
+          type="submit"
+          className="button button--primary"
+          disabled={isSubmitting || isDisabled}
+        >
+          {isSubmitting ? 'Salvando...' : 'Cadastrar transação'}
+        </button>
+      </div>
     </form>
   )
 }
@@ -219,28 +240,22 @@ function validateForm({
 }): ValidationResult {
   const errors: FormErrors = {}
   const trimmedDescription = description.trim()
-  const normalizedValue = value.trim().replace(',', '.')
+  const parsedValue = parseCurrencyInput(value)
 
   if (!description) {
     errors.description = 'Informe a descrição.'
   } else if (!trimmedDescription) {
     errors.description = 'A descrição não pode conter apenas espaços.'
   } else if (trimmedDescription.length > 200) {
-    errors.description = 'A descrição deve possuir no máximo 200 caracteres.'
+    errors.description = 'A descrição deve ter no máximo 200 caracteres.'
   }
 
-  if (!value.trim()) {
-    errors.value = 'Informe o valor.'
-  } else if (!/^\d+(?:[.,]\d{1,2})?$/.test(value.trim())) {
-    errors.value = hasTooManyDecimalPlaces(value.trim())
-      ? 'O valor deve possuir no máximo duas casas decimais.'
-      : 'O valor deve ser maior que zero.'
-  } else if (Number(normalizedValue) <= 0) {
-    errors.value = 'O valor deve ser maior que zero.'
+  if (!parsedValue.isValid) {
+    errors.value = getValueErrorMessage(parsedValue.reason)
   }
 
   if (!type) {
-    errors.type = 'O tipo da transação é obrigatório.'
+    errors.type = 'Selecione o tipo da transação.'
   }
 
   if (!personId) {
@@ -255,7 +270,7 @@ function validateForm({
     selectedPerson.age < 18 &&
     parsedType === TransactionType.Income
   ) {
-    errors.type = 'Pessoas menores de 18 anos só podem possuir despesas.'
+    errors.type = 'Para menores de 18 anos, registre apenas despesas.'
   }
 
   if (errors.description || errors.value || errors.type || errors.personId) {
@@ -266,13 +281,63 @@ function validateForm({
     errors,
     data: {
       description: trimmedDescription,
-      value: Number(normalizedValue),
+      value: parsedValue.isValid ? parsedValue.value : 0,
       type: parsedType,
       personId: parsedPersonId,
     },
   }
 }
 
-function hasTooManyDecimalPlaces(value: string) {
-  return /^\d+[.,]\d{3,}$/.test(value)
+function parseCurrencyInput(rawValue: string): ParsedCurrency {
+  const trimmedValue = rawValue.trim()
+
+  if (!trimmedValue) {
+    return { isValid: false, reason: 'empty' }
+  }
+
+  const normalizedInput = trimmedValue.replace(/\s/g, '')
+
+  if (/^R\$/i.test(normalizedInput)) {
+    return { isValid: false, reason: 'format' }
+  }
+
+  const plainNumberPattern = /^-?\d+(,\d{1,2})?$/
+  const brThousandsPattern = /^-?\d{1,3}(\.\d{3})+(,\d{1,2})?$/
+
+  if (!plainNumberPattern.test(normalizedInput) && !brThousandsPattern.test(normalizedInput)) {
+    if (/^-?\d+,\d{3,}$/.test(normalizedInput)) {
+      return { isValid: false, reason: 'decimalPlaces' }
+    }
+
+    return { isValid: false, reason: 'format' }
+  }
+
+  const normalizedValue = normalizedInput.replace(/\./g, '').replace(',', '.')
+  const parsedValue = Number(normalizedValue)
+
+  if (!Number.isFinite(parsedValue)) {
+    return { isValid: false, reason: 'format' }
+  }
+
+  if (parsedValue <= 0) {
+    return { isValid: false, reason: 'nonPositive' }
+  }
+
+  return { isValid: true, value: parsedValue }
+}
+
+function getValueErrorMessage(reason: Exclude<ParsedCurrency, { isValid: true }>['reason']) {
+  if (reason === 'empty') {
+    return 'Informe o valor.'
+  }
+
+  if (reason === 'decimalPlaces') {
+    return 'Use no máximo duas casas decimais.'
+  }
+
+  if (reason === 'nonPositive') {
+    return 'O valor deve ser maior que zero.'
+  }
+
+  return 'Informe um valor válido, como 6500,00.'
 }

@@ -9,7 +9,10 @@ export function Layout() {
             <span className="app-brand__mark" aria-hidden="true">
               R$
             </span>
-            <span>Casa em Conta</span>
+            <span className="app-brand__copy">
+              <span>Casa em Conta</span>
+              <small>Finanças residenciais</small>
+            </span>
           </NavLink>
 
           <nav className="app-nav" aria-label="Navegação principal">

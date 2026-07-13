@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FeedbackMessage } from '../../components/feedback/FeedbackMessage'
 import { DeleteConfirmation } from '../../components/people/DeleteConfirmation'
 import { PeopleList } from '../../components/people/PeopleList'
@@ -47,7 +47,7 @@ export function PeoplePage() {
 
     try {
       await createPerson(data)
-      // Recarrega a lista para refletir a ordenação e os dados definitivos da API.
+      // Atualiza a lista após o cadastro para mostrar as informações salvas.
       await loadPeople()
       setFeedback({ type: 'success', message: 'Pessoa cadastrada com sucesso.' })
     } catch (error) {
@@ -71,7 +71,7 @@ export function PeoplePage() {
     try {
       await deletePerson(personToDelete.id)
       setPersonToDelete(null)
-      // A exclusão pode remover transações em cascata; a lista volta a ser buscada da API.
+      // Atualiza a lista após a exclusão para manter a tela em dia.
       await loadPeople()
       setFeedback({ type: 'success', message: 'Pessoa excluída com sucesso.' })
     } catch (error) {
@@ -87,7 +87,7 @@ export function PeoplePage() {
   return (
     <section className="page-section">
       <div className="page-heading">
-        <p className="eyebrow">Módulo de pessoas</p>
+        <p className="eyebrow">Cadastro residencial</p>
         <h1>Pessoas</h1>
         <p>
           Cadastre e gerencie as pessoas que participarão do controle financeiro
@@ -103,7 +103,7 @@ export function PeoplePage() {
         />
       ) : null}
 
-      <section className="panel" aria-labelledby="person-form-title">
+      <section className="panel panel--form" aria-labelledby="person-form-title">
         <h2 id="person-form-title">Cadastrar pessoa</h2>
         <PersonForm
           isSubmitting={isSubmitting}
@@ -112,11 +112,11 @@ export function PeoplePage() {
         />
       </section>
 
-      <section className="panel" aria-labelledby="people-list-title">
+      <section className="panel panel--data" aria-labelledby="people-list-title">
         <div className="section-header">
           <div>
             <h2 id="people-list-title">Pessoas cadastradas</h2>
-            <p>A lista segue a ordenação retornada pela API.</p>
+            <p>Acompanhe quem já está cadastrado e mantenha os dados atualizados.</p>
           </div>
           <button
             type="button"
@@ -124,7 +124,7 @@ export function PeoplePage() {
             disabled={isLoading}
             onClick={() => void loadPeople()}
           >
-            Tentar novamente
+            Atualizar
           </button>
         </div>
 

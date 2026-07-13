@@ -39,7 +39,7 @@ describe('TransactionsList', () => {
     render(<TransactionsList transactions={[]} />)
 
     expect(screen.getByText('Nenhuma transação cadastrada.')).toBeInTheDocument()
-    expect(screen.getByText('Utilize o formulário acima para registrar a primeira transação.')).toBeInTheDocument()
+    expect(screen.getByText('Registre a primeira movimentação para acompanhar o saldo.')).toBeInTheDocument()
   })
 
   it('não apresenta ações de edição ou exclusão', () => {
