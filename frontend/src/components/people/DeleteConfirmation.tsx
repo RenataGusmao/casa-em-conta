@@ -40,8 +40,7 @@ export function DeleteConfirmation({
       >
         <h2 id="delete-person-title">Excluir pessoa</h2>
         <p>
-          Deseja excluir {person.name}? Quando houver transações vinculadas, elas
-          também serão removidas.
+          Tem certeza que deseja excluir {person.name}? As transações vinculadas a essa pessoa também serão removidas.
         </p>
         <div className="modal-actions">
           <button
@@ -59,7 +58,7 @@ export function DeleteConfirmation({
             disabled={isDeleting}
             onClick={onConfirm}
           >
-            {isDeleting ? 'Excluindo...' : 'Confirmar exclusão'}
+            {isDeleting ? 'Excluindo...' : 'Excluir pessoa'}
           </button>
         </div>
       </div>

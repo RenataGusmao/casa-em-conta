@@ -1,4 +1,4 @@
-﻿import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -84,7 +84,7 @@ describe('TransactionForm', () => {
     await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Expense))
     await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
 
-    expect(await screen.findByText('A descrição deve possuir no máximo 200 caracteres.')).toBeInTheDocument()
+    expect(await screen.findByText('A descrição deve ter no máximo 200 caracteres.')).toBeInTheDocument()
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
@@ -122,7 +122,7 @@ describe('TransactionForm', () => {
     await user.clear(valueInput)
     await user.type(valueInput, '10,999')
     await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
-    expect(await screen.findByText('O valor deve possuir no máximo duas casas decimais.')).toBeInTheDocument()
+    expect(await screen.findByText('Use no máximo duas casas decimais.')).toBeInTheDocument()
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
@@ -134,7 +134,7 @@ describe('TransactionForm', () => {
     await user.type(screen.getByLabelText('Valor'), '100')
     await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
 
-    expect(await screen.findByText('O tipo da transação é obrigatório.')).toBeInTheDocument()
+    expect(await screen.findByText('Selecione o tipo da transação.')).toBeInTheDocument()
     expect(screen.getByText('Selecione uma pessoa.')).toBeInTheDocument()
     expect(onSubmit).not.toHaveBeenCalled()
   })
@@ -164,7 +164,7 @@ describe('TransactionForm', () => {
     await user.selectOptions(screen.getByLabelText('Pessoa'), '2')
 
     expect(screen.getByRole('option', { name: 'Receita' })).toBeDisabled()
-    expect(screen.getByText('Pessoas menores de 18 anos só podem possuir despesas.')).toBeInTheDocument()
+    expect(screen.getByText('Para menores de 18 anos, registre apenas despesas.')).toBeInTheDocument()
   })
 
   it('permite Receita para pessoa com exatamente 18 anos e para adulto', async () => {
@@ -188,16 +188,60 @@ describe('TransactionForm', () => {
     expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ type: TransactionType.Income, personId: 1 }))
   })
 
+
+  it.each([
+    ['6500', 6500],
+    ['6500,00', 6500],
+    ['6.500,00', 6500],
+    ['500,5', 500.5],
+    ['500,50', 500.5],
+  ])('aceita o formato de valor %s', async (typedValue, expectedValue) => {
+    const user = userEvent.setup()
+    const { onSubmit } = renderForm()
+
+    await user.type(screen.getByLabelText('Descrição'), 'Lançamento residencial')
+    await user.type(screen.getByLabelText('Valor'), typedValue)
+    await user.selectOptions(screen.getByLabelText('Pessoa'), '1')
+    await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Expense))
+    await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
+
+    expect(onSubmit).toHaveBeenCalledWith({
+      description: 'Lançamento residencial',
+      value: expectedValue,
+      type: TransactionType.Expense,
+      personId: 1,
+    })
+  })
+
+  it.each([
+    ['R$ 500,00', 'Informe um valor válido, como 6500,00.'],
+    ['6.500.00', 'Informe um valor válido, como 6500,00.'],
+    ['0', 'O valor deve ser maior que zero.'],
+    ['-100', 'O valor deve ser maior que zero.'],
+    ['texto', 'Informe um valor válido, como 6500,00.'],
+  ])('rejeita o formato de valor %s', async (typedValue, errorMessage) => {
+    const user = userEvent.setup()
+    const { onSubmit } = renderForm()
+
+    await user.type(screen.getByLabelText('Descrição'), 'Lançamento residencial')
+    await user.type(screen.getByLabelText('Valor'), typedValue)
+    await user.selectOptions(screen.getByLabelText('Pessoa'), '1')
+    await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Expense))
+    await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
+
+    expect(await screen.findByText(errorMessage)).toBeInTheDocument()
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
   it('bloqueia envio duplicado durante carregamento', () => {
     renderForm({ isSubmitting: true })
 
-    expect(screen.getByRole('button', { name: 'Cadastrando...' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Salvando...' })).toBeDisabled()
   })
 
   it('exibe comportamento adequado quando não existem pessoas', () => {
     renderForm({ people: [] })
 
-    expect(screen.getByText('Cadastre uma pessoa antes de registrar uma transação.')).toBeInTheDocument()
+    expect(screen.getByText('Cadastre uma pessoa para começar.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Ir para pessoas' })).toHaveAttribute('href', '/pessoas')
   })
 

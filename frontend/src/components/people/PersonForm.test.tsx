@@ -136,6 +136,6 @@ describe('PersonForm', () => {
   it('desabilita o botão durante envio', () => {
     renderForm(true)
 
-    expect(screen.getByRole('button', { name: 'Cadastrando...' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Salvando...' })).toBeDisabled()
   })
 })

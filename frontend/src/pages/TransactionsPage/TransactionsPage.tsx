@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FeedbackMessage } from '../../components/feedback/FeedbackMessage'
 import { TransactionForm } from '../../components/transactions/TransactionForm'
 import { TransactionsList } from '../../components/transactions/TransactionsList'
@@ -73,7 +73,7 @@ export function TransactionsPage() {
 
     try {
       await createTransaction(data)
-      // Após cadastrar, a listagem é buscada novamente para refletir o retorno da API.
+      // Atualiza a listagem após salvar a transação.
       const loadedTransactions = await getTransactions()
       setTransactions(loadedTransactions)
       setFeedback({
@@ -93,9 +93,9 @@ export function TransactionsPage() {
   return (
     <section className="page-section">
       <div className="page-heading">
-        <p className="eyebrow">Módulo de transações</p>
+        <p className="eyebrow">Movimentações</p>
         <h1>Transações</h1>
-        <p>Registre receitas e despesas vinculadas às pessoas da residência.</p>
+        <p>Lance receitas e despesas com descrição, pessoa responsável e valor.</p>
       </div>
 
       {feedback ? (
@@ -106,7 +106,7 @@ export function TransactionsPage() {
         />
       ) : null}
 
-      <section className="panel" aria-labelledby="transaction-form-title">
+      <section className="panel panel--form panel--transaction-form" aria-labelledby="transaction-form-title">
         <h2 id="transaction-form-title">Cadastrar transação</h2>
         {isLoading ? (
           <p className="loading-message">Carregando transações...</p>
@@ -120,11 +120,11 @@ export function TransactionsPage() {
         )}
       </section>
 
-      <section className="panel" aria-labelledby="transactions-list-title">
+      <section className="panel panel--data" aria-labelledby="transactions-list-title">
         <div className="section-header">
           <div>
             <h2 id="transactions-list-title">Transações cadastradas</h2>
-            <p>A lista segue a ordem retornada pela API.</p>
+            <p>Veja os lançamentos mais recentes com valores formatados em reais.</p>
           </div>
           <button
             type="button"
@@ -132,7 +132,7 @@ export function TransactionsPage() {
             disabled={isLoading}
             onClick={() => void loadData()}
           >
-            Tentar novamente
+            Atualizar
           </button>
         </div>
 

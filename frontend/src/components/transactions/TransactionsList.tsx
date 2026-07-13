@@ -11,13 +11,13 @@ export function TransactionsList({ transactions }: TransactionsListProps) {
     return (
       <div className="empty-state">
         <strong>Nenhuma transação cadastrada.</strong>
-        <p>Utilize o formulário acima para registrar a primeira transação.</p>
+        <p>Registre a primeira movimentação para acompanhar o saldo.</p>
       </div>
     )
   }
 
   return (
-    <div className="table-wrap">
+    <div className="table-wrap" role="region" aria-label="Transações cadastradas" tabIndex={0}>
       <table className="people-table transactions-table">
         <thead>
           <tr>
@@ -31,15 +31,17 @@ export function TransactionsList({ transactions }: TransactionsListProps) {
         <tbody>
           {transactions.map((transaction) => (
             <tr key={transaction.id}>
-              <td>{transaction.id}</td>
-              <td>{transaction.description}</td>
-              <td>{transaction.personName}</td>
+              <td className="table-id">#{transaction.id}</td>
+              <td>
+                <strong className="table-primary-text">{transaction.description}</strong>
+              </td>
+              <td className="table-secondary-text">{transaction.personName}</td>
               <td>
                 <span className={`transaction-type transaction-type--${transaction.type}`}>
                   {getTypeLabel(transaction.type)}
                 </span>
               </td>
-              <td>{formatCurrency(transaction.value)}</td>
+              <td className="table-money">{formatCurrency(transaction.value)}</td>
             </tr>
           ))}
         </tbody>

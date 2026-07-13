@@ -51,6 +51,7 @@ export function PersonForm({
             type="text"
             value={name}
             maxLength={180}
+            placeholder="Ex.: Ana Souza"
             disabled={isSubmitting}
             aria-describedby={errors.name ? 'person-name-error' : undefined}
             aria-invalid={Boolean(errors.name)}
@@ -74,6 +75,7 @@ export function PersonForm({
             min="0"
             max="120"
             step="1"
+            placeholder="Ex.: 32"
             disabled={isSubmitting}
             aria-describedby={errors.age ? 'person-age-error' : undefined}
             aria-invalid={Boolean(errors.age)}
@@ -87,9 +89,11 @@ export function PersonForm({
         </div>
       </div>
 
-      <button type="submit" className="button button--primary" disabled={isSubmitting}>
-        {isSubmitting ? 'Cadastrando...' : 'Cadastrar pessoa'}
-      </button>
+      <div className="form-actions">
+        <button type="submit" className="button button--primary" disabled={isSubmitting}>
+          {isSubmitting ? 'Salvando...' : 'Cadastrar pessoa'}
+        </button>
+      </div>
     </form>
   )
 }
@@ -130,5 +134,3 @@ function validateForm(name: string, age: string) {
     },
   }
 }
-
-

@@ -17,9 +17,9 @@ describe('DeleteConfirmation', () => {
     )
 
     expect(screen.getByRole('dialog', { name: 'Excluir pessoa' })).toBeInTheDocument()
-    expect(screen.getByText(/Deseja excluir Mariana Freitas/)).toBeInTheDocument()
+    expect(screen.getByText(/Tem certeza que deseja excluir Mariana Freitas/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Cancelar' })).toHaveFocus()
-    expect(screen.getByRole('button', { name: 'Confirmar exclusão' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Excluir pessoa' })).toBeInTheDocument()
   })
 
   it('chama cancelar e confirmar exclusão', async () => {
@@ -35,7 +35,7 @@ describe('DeleteConfirmation', () => {
       />,
     )
 
-    await user.click(screen.getByRole('button', { name: 'Confirmar exclusão' }))
+    await user.click(screen.getByRole('button', { name: 'Excluir pessoa' }))
     await user.click(screen.getByRole('button', { name: 'Cancelar' }))
 
     expect(onConfirm).toHaveBeenCalledTimes(1)
