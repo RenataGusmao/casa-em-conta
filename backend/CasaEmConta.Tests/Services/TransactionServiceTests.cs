@@ -15,7 +15,7 @@ public class TransactionServiceTests
     public async Task CreateAsync_CreatesExpenseForMinorPerson()
     {
         await using var database = await CreateDatabaseAsync();
-        var minor = await AddPersonAsync(database.Context, "João", 12);
+        var minor = await AddPersonAsync(database.Context, "Lucas Almeida", 12);
         var service = new TransactionService(database.Context);
 
         var transaction = await service.CreateAsync(new CreateTransactionRequest
@@ -30,14 +30,14 @@ public class TransactionServiceTests
         Assert.Equal("Material escolar", transaction.Description);
         Assert.Equal(TransactionType.Expense, transaction.Type);
         Assert.Equal(minor.Id, transaction.PersonId);
-        Assert.Equal("João", transaction.PersonName);
+        Assert.Equal("Lucas Almeida", transaction.PersonName);
     }
 
     [Fact]
     public async Task CreateAsync_CreatesExpenseForAdultPerson()
     {
         await using var database = await CreateDatabaseAsync();
-        var adult = await AddPersonAsync(database.Context, "Ana", 28);
+        var adult = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
         var transaction = await service.CreateAsync(new CreateTransactionRequest
@@ -56,12 +56,12 @@ public class TransactionServiceTests
     public async Task CreateAsync_CreatesIncomeForAdultPerson()
     {
         await using var database = await CreateDatabaseAsync();
-        var adult = await AddPersonAsync(database.Context, "Ana", 28);
+        var adult = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
         var transaction = await service.CreateAsync(new CreateTransactionRequest
         {
-            Description = "Salário",
+            Description = "Salário mensal",
             Value = 2500,
             Type = TransactionType.Income,
             PersonId = adult.Id
@@ -74,12 +74,12 @@ public class TransactionServiceTests
     public async Task CreateAsync_CreatesIncomeForPersonWithExactly18Years()
     {
         await using var database = await CreateDatabaseAsync();
-        var adult = await AddPersonAsync(database.Context, "Maria", 18);
+        var adult = await AddPersonAsync(database.Context, "Beatriz Souza", 18);
         var service = new TransactionService(database.Context);
 
         var transaction = await service.CreateAsync(new CreateTransactionRequest
         {
-            Description = "Bolsa",
+            Description = "Bolsa de estudos",
             Value = 500,
             Type = TransactionType.Income,
             PersonId = adult.Id
@@ -92,7 +92,7 @@ public class TransactionServiceTests
     public async Task CreateAsync_RejectsIncomeForMinorPerson()
     {
         await using var database = await CreateDatabaseAsync();
-        var minor = await AddPersonAsync(database.Context, "João", 17);
+        var minor = await AddPersonAsync(database.Context, "Lucas Almeida", 17);
         var service = new TransactionService(database.Context);
 
         var exception = await Assert.ThrowsAsync<DomainValidationException>(() =>
@@ -125,7 +125,7 @@ public class TransactionServiceTests
     public async Task CreateAsync_RejectsEmptyDescription(string description)
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
         var exception = await Assert.ThrowsAsync<DomainValidationException>(() =>
@@ -138,19 +138,19 @@ public class TransactionServiceTests
     public async Task CreateAsync_TrimsDescription()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
-        var transaction = await service.CreateAsync(CreateValidRequest(person.Id, "  Mercado  "));
+        var transaction = await service.CreateAsync(CreateValidRequest(person.Id, "  Compra de supermercado  "));
 
-        Assert.Equal("Mercado", transaction.Description);
+        Assert.Equal("Compra de supermercado", transaction.Description);
     }
 
     [Fact]
     public async Task CreateAsync_RejectsDescriptionLongerThan200Characters()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
         var exception = await Assert.ThrowsAsync<DomainValidationException>(() =>
@@ -165,7 +165,7 @@ public class TransactionServiceTests
     public async Task CreateAsync_RejectsValueLessThanOrEqualToZero(string valueText)
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
         var value = decimal.Parse(valueText, System.Globalization.CultureInfo.InvariantCulture);
 
@@ -179,7 +179,7 @@ public class TransactionServiceTests
     public async Task CreateAsync_RejectsMissingValue()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
         var exception = await Assert.ThrowsAsync<DomainValidationException>(() =>
@@ -192,7 +192,7 @@ public class TransactionServiceTests
     public async Task CreateAsync_RejectsMissingType()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
         var exception = await Assert.ThrowsAsync<DomainValidationException>(() =>
@@ -205,7 +205,7 @@ public class TransactionServiceTests
     public async Task CreateAsync_RejectsInvalidType()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
 
         var exception = await Assert.ThrowsAsync<DomainValidationException>(() =>
@@ -230,10 +230,10 @@ public class TransactionServiceTests
     public async Task GetAllAsync_ReturnsTransactionsWithPersonNameOrderedByDescendingId()
     {
         await using var database = await CreateDatabaseAsync();
-        var person = await AddPersonAsync(database.Context, "Ana", 28);
+        var person = await AddPersonAsync(database.Context, "Mariana Freitas", 28);
         var service = new TransactionService(database.Context);
-        var first = await service.CreateAsync(CreateValidRequest(person.Id, "Primeira"));
-        var second = await service.CreateAsync(CreateValidRequest(person.Id, "Segunda"));
+        var first = await service.CreateAsync(CreateValidRequest(person.Id, "Conta de internet"));
+        var second = await service.CreateAsync(CreateValidRequest(person.Id, "Compra de medicamentos"));
 
         var transactions = await service.GetAllAsync();
 
@@ -242,14 +242,14 @@ public class TransactionServiceTests
             transaction =>
             {
                 Assert.Equal(second.Id, transaction.Id);
-                Assert.Equal("Ana", transaction.PersonName);
+                Assert.Equal("Mariana Freitas", transaction.PersonName);
             },
             transaction => Assert.Equal(first.Id, transaction.Id));
     }
 
     private static CreateTransactionRequest CreateValidRequest(
         int? personId,
-        string description = "Mercado",
+        string description = "Compra de supermercado",
         decimal? value = 10,
         TransactionType? type = TransactionType.Expense)
     {

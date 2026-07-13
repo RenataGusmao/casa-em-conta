@@ -68,7 +68,7 @@ describe('PersonForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Nome'), 'Ana')
+    await user.type(screen.getByLabelText('Nome'), 'Mariana Freitas')
     await user.click(screen.getByRole('button', { name: 'Cadastrar pessoa' }))
 
     expect(await screen.findByText('Informe a idade.')).toBeInTheDocument()
@@ -79,7 +79,7 @@ describe('PersonForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Nome'), 'Ana')
+    await user.type(screen.getByLabelText('Nome'), 'Mariana Freitas')
     await user.type(screen.getByLabelText('Idade'), '-1')
     await user.click(screen.getByRole('button', { name: 'Cadastrar pessoa' }))
 
@@ -91,7 +91,7 @@ describe('PersonForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Nome'), 'Ana')
+    await user.type(screen.getByLabelText('Nome'), 'Mariana Freitas')
     await user.type(screen.getByLabelText('Idade'), '10.5')
     await user.click(screen.getByRole('button', { name: 'Cadastrar pessoa' }))
 
@@ -103,7 +103,7 @@ describe('PersonForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Nome'), 'Ana')
+    await user.type(screen.getByLabelText('Nome'), 'Mariana Freitas')
     await user.type(screen.getByLabelText('Idade'), '121')
     await user.click(screen.getByRole('button', { name: 'Cadastrar pessoa' }))
 

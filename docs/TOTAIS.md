@@ -21,7 +21,7 @@ Resposta HTTP esperada:
   "people": [
     {
       "personId": 1,
-      "personName": "Ana",
+      "personName": "Mariana Freitas",
       "totalIncome": 1000.0,
       "totalExpense": 250.0,
       "balance": 750.0

@@ -14,7 +14,7 @@ public class TransactionsEndpointsTests
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
-        var person = await CreatePersonAsync(client, "Ana", 28);
+        var person = await CreatePersonAsync(client, "Mariana Freitas", 28);
 
         var response = await client.PostAsJsonAsync("/api/transactions", new CreateTransactionRequest
         {
@@ -29,7 +29,7 @@ public class TransactionsEndpointsTests
         Assert.NotNull(transaction);
         Assert.True(transaction.Id > 0);
         Assert.Equal("Conta de energia", transaction.Description);
-        Assert.Equal("Ana", transaction.PersonName);
+        Assert.Equal("Mariana Freitas", transaction.PersonName);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class TransactionsEndpointsTests
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
-        var person = await CreatePersonAsync(client, "João", 17);
+        var person = await CreatePersonAsync(client, "Lucas Almeida", 17);
 
         var response = await client.PostAsJsonAsync("/api/transactions", new CreateTransactionRequest
         {
@@ -69,7 +69,7 @@ public class TransactionsEndpointsTests
 
         var response = await client.PostAsJsonAsync("/api/transactions", new CreateTransactionRequest
         {
-            Description = "Mercado",
+            Description = "Compra de supermercado",
             Value = 100,
             Type = TransactionType.Expense,
             PersonId = 999
@@ -100,10 +100,10 @@ public class TransactionsEndpointsTests
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
-        var person = await CreatePersonAsync(client, "Ana", 28);
+        var person = await CreatePersonAsync(client, "Mariana Freitas", 28);
         await client.PostAsJsonAsync("/api/transactions", new CreateTransactionRequest
         {
-            Description = "Mercado",
+            Description = "Compra de supermercado",
             Value = 100,
             Type = TransactionType.Expense,
             PersonId = person.Id
@@ -112,7 +112,7 @@ public class TransactionsEndpointsTests
         var transactions = await client.GetFromJsonAsync<List<TransactionResponse>>("/api/transactions");
 
         Assert.NotNull(transactions);
-        Assert.Contains(transactions, transaction => transaction.PersonName == "Ana");
+        Assert.Contains(transactions, transaction => transaction.PersonName == "Mariana Freitas");
     }
 
     private static async Task<PersonResponse> CreatePersonAsync(HttpClient client, string name, int age)

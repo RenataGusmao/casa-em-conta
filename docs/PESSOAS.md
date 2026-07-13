@@ -48,7 +48,7 @@ A página possui formulário de cadastro, listagem, confirmação de exclusão e
 5. Exibir mensagem de sucesso.
 6. Limpar o formulário.
 
-O nome é enviado com `trim`, então valores como `  Ana Souza  ` são salvos como `Ana Souza`.
+O nome é enviado com `trim`, então valores como `  Ana Ribeiro  ` são salvos como `Ana Ribeiro`.
 
 ## Fluxo de exclusão
 
@@ -74,7 +74,7 @@ Pessoa cadastrada:
 ```json
 {
   "id": 1,
-  "name": "Ana Souza",
+  "name": "Ana Ribeiro",
   "age": 28
 }
 ```

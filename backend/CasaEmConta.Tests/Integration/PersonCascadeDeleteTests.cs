@@ -18,7 +18,7 @@ public class PersonCascadeDeleteTests
         var client = factory.CreateClient();
         var personResponse = await client.PostAsJsonAsync("/api/people", new CreatePersonRequest
         {
-            Name = "Ana",
+            Name = "Mariana Freitas",
             Age = 28
         });
         personResponse.EnsureSuccessStatusCode();
@@ -26,7 +26,7 @@ public class PersonCascadeDeleteTests
 
         var expenseResponse = await client.PostAsJsonAsync("/api/transactions", new CreateTransactionRequest
         {
-            Description = "Mercado",
+            Description = "Compra de supermercado",
             Value = 100,
             Type = TransactionType.Expense,
             PersonId = person.Id
@@ -35,7 +35,7 @@ public class PersonCascadeDeleteTests
 
         var incomeResponse = await client.PostAsJsonAsync("/api/transactions", new CreateTransactionRequest
         {
-            Description = "Salário",
+            Description = "Salário mensal",
             Value = 1000,
             Type = TransactionType.Income,
             PersonId = person.Id

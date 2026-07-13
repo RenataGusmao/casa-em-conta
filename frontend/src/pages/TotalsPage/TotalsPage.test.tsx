@@ -14,7 +14,7 @@ const report: TotalsReport = {
   people: [
     {
       personId: 1,
-      personName: 'Ana',
+      personName: 'Mariana Freitas',
       totalIncome: 1000,
       totalExpense: 250,
       balance: 750,
@@ -53,7 +53,7 @@ describe('TotalsPage', () => {
 
     renderPage()
 
-    expect(await screen.findByText('Ana')).toBeInTheDocument()
+    expect(await screen.findByText('Mariana Freitas')).toBeInTheDocument()
     expect(screen.getAllByText('R$ 1.000,00')).toHaveLength(2)
     expect(screen.getAllByText('Positivo: R$ 750,00')).toHaveLength(2)
   })
@@ -70,7 +70,7 @@ describe('TotalsPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Atualizar' }))
 
-    expect(await screen.findByText('Ana')).toBeInTheDocument()
+    expect(await screen.findByText('Mariana Freitas')).toBeInTheDocument()
     expect(getTotalsReport).toHaveBeenCalledTimes(2)
   })
 
@@ -79,7 +79,7 @@ describe('TotalsPage', () => {
     vi.mocked(getTotalsReport).mockResolvedValue(report)
 
     renderPage()
-    await screen.findByText('Ana')
+    await screen.findByText('Mariana Freitas')
 
     await user.click(screen.getByRole('button', { name: 'Atualizar' }))
 

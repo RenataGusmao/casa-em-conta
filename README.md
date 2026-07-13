@@ -90,11 +90,25 @@ Front-end:
 http://localhost:5173
 ```
 
-O front-end usa a variável `VITE_API_BASE_URL`. Veja `frontend/.env.example`.
+### Configuração do front-end
+
+O arquivo `.env` é local e não é enviado ao repositório.
+
+Para criar o arquivo a partir do exemplo, execute dentro da pasta `frontend`:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Ou crie manualmente:
 
 ```env
 VITE_API_BASE_URL=http://localhost:5077/api
 ```
+
+Caso o `.env` não seja criado, o front-end utiliza `http://localhost:5077/api` como endereço padrão da API no ambiente local.
+
+Em outro ambiente, ajuste `VITE_API_BASE_URL` para apontar para a URL correta da API.
 
 Para usar a aplicação, mantenha API e front-end rodando ao mesmo tempo.
 
@@ -158,7 +172,7 @@ Totais:
 
 ## Persistência
 
-O banco SQLite local é criado em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. Arquivos `.db`, `.db-shm` e `.db-wal` são ignorados pelo Git.
+O banco SQLite local é criado vazio em `backend/CasaEmConta.Api/casaemconta.db` ao aplicar as migrations. O arquivo do banco não é versionado; depois de criado, os registros cadastrados permanecem disponíveis mesmo após encerrar e iniciar novamente a aplicação. Arquivos `.db`, `.db-shm` e `.db-wal` são ignorados pelo Git.
 
 ## Testes
 

@@ -8,9 +8,9 @@ import { TransactionType } from '../../types/transaction'
 import type { CreateTransactionRequest } from '../../types/transaction'
 
 const people: Person[] = [
-  { id: 1, name: 'Ana', age: 28 },
-  { id: 2, name: 'Bruno', age: 17 },
-  { id: 3, name: 'Carla', age: 18 },
+  { id: 1, name: 'Mariana Freitas', age: 28 },
+  { id: 2, name: 'Lucas Almeida', age: 17 },
+  { id: 3, name: 'Beatriz Souza', age: 18 },
 ]
 
 function renderForm(options?: { isSubmitting?: boolean; isDisabled?: boolean; people?: Person[] }) {
@@ -31,7 +31,7 @@ function renderForm(options?: { isSubmitting?: boolean; isDisabled?: boolean; pe
 }
 
 async function fillValidExpense(user: ReturnType<typeof userEvent.setup>) {
-  await user.type(screen.getByLabelText('Descrição'), 'Mercado')
+  await user.type(screen.getByLabelText('Descrição'), 'Compra de supermercado')
   await user.type(screen.getByLabelText('Valor'), '100')
   await user.selectOptions(screen.getByLabelText('Pessoa'), '1')
   await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Expense))
@@ -92,7 +92,7 @@ describe('TransactionForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Descrição'), 'Mercado')
+    await user.type(screen.getByLabelText('Descrição'), 'Compra de supermercado')
     await user.selectOptions(screen.getByLabelText('Pessoa'), '1')
     await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Expense))
     await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
@@ -106,7 +106,7 @@ describe('TransactionForm', () => {
     const { onSubmit } = renderForm()
     const valueInput = screen.getByLabelText('Valor')
 
-    await user.type(screen.getByLabelText('Descrição'), 'Mercado')
+    await user.type(screen.getByLabelText('Descrição'), 'Compra de supermercado')
     await user.selectOptions(screen.getByLabelText('Pessoa'), '1')
     await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Expense))
 
@@ -130,7 +130,7 @@ describe('TransactionForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Descrição'), 'Mercado')
+    await user.type(screen.getByLabelText('Descrição'), 'Compra de supermercado')
     await user.type(screen.getByLabelText('Valor'), '100')
     await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
 
@@ -143,14 +143,14 @@ describe('TransactionForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Descrição'), '  Lanche  ')
+    await user.type(screen.getByLabelText('Descrição'), '  Mensalidade escolar  ')
     await user.type(screen.getByLabelText('Valor'), '25,50')
     await user.selectOptions(screen.getByLabelText('Pessoa'), '2')
     await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Expense))
     await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
 
     expect(onSubmit).toHaveBeenCalledWith({
-      description: 'Lanche',
+      description: 'Mensalidade escolar',
       value: 25.5,
       type: TransactionType.Expense,
       personId: 2,
@@ -171,7 +171,7 @@ describe('TransactionForm', () => {
     const user = userEvent.setup()
     const { onSubmit } = renderForm()
 
-    await user.type(screen.getByLabelText('Descrição'), 'Bolsa')
+    await user.type(screen.getByLabelText('Descrição'), 'Bolsa de estudos')
     await user.type(screen.getByLabelText('Valor'), '500')
     await user.selectOptions(screen.getByLabelText('Pessoa'), '3')
     await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Income))
@@ -179,7 +179,7 @@ describe('TransactionForm', () => {
 
     expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ type: TransactionType.Income, personId: 3 }))
 
-    await user.type(screen.getByLabelText('Descrição'), 'Salário')
+    await user.type(screen.getByLabelText('Descrição'), 'Salário mensal')
     await user.type(screen.getByLabelText('Valor'), '1000')
     await user.selectOptions(screen.getByLabelText('Pessoa'), '1')
     await user.selectOptions(screen.getByLabelText('Tipo'), String(TransactionType.Income))
@@ -209,7 +209,7 @@ describe('TransactionForm', () => {
     await user.click(screen.getByRole('button', { name: 'Cadastrar transação' }))
 
     expect(onSubmit).toHaveBeenCalledWith({
-      description: 'Mercado',
+      description: 'Compra de supermercado',
       value: 100,
       type: TransactionType.Expense,
       personId: 1,

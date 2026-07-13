@@ -45,14 +45,14 @@ public class ReportsEndpointsTests
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
-        var person = await CreatePersonAsync(client, "Ana", 28);
+        var person = await CreatePersonAsync(client, "Mariana Freitas", 28);
 
         var report = await client.GetFromJsonAsync<TotalsReportResponse>("/api/reports/totals");
 
         Assert.NotNull(report);
         var personTotals = Assert.Single(report.People);
         Assert.Equal(person.Id, personTotals.PersonId);
-        Assert.Equal("Ana", personTotals.PersonName);
+        Assert.Equal("Mariana Freitas", personTotals.PersonName);
         Assert.Equal(0m, personTotals.TotalIncome);
         Assert.Equal(0m, personTotals.TotalExpense);
         Assert.Equal(0m, personTotals.Balance);
@@ -63,23 +63,23 @@ public class ReportsEndpointsTests
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
-        var ana = await CreatePersonAsync(client, "Ana", 28);
-        var bruno = await CreatePersonAsync(client, "Bruno", 35);
-        await CreateTransactionAsync(client, ana.Id, TransactionType.Income, 1000.50m);
-        await CreateTransactionAsync(client, ana.Id, TransactionType.Expense, 250.25m);
-        await CreateTransactionAsync(client, bruno.Id, TransactionType.Expense, 100m);
+        var mariana = await CreatePersonAsync(client, "Mariana Freitas", 28);
+        var carlos = await CreatePersonAsync(client, "Carlos Lima", 35);
+        await CreateTransactionAsync(client, mariana.Id, TransactionType.Income, 1000.50m);
+        await CreateTransactionAsync(client, mariana.Id, TransactionType.Expense, 250.25m);
+        await CreateTransactionAsync(client, carlos.Id, TransactionType.Expense, 100m);
 
         var report = await client.GetFromJsonAsync<TotalsReportResponse>("/api/reports/totals");
 
         Assert.NotNull(report);
-        var anaTotals = Assert.Single(report.People, person => person.PersonId == ana.Id);
-        var brunoTotals = Assert.Single(report.People, person => person.PersonId == bruno.Id);
-        Assert.Equal(1000.50m, anaTotals.TotalIncome);
-        Assert.Equal(250.25m, anaTotals.TotalExpense);
-        Assert.Equal(750.25m, anaTotals.Balance);
-        Assert.Equal(0m, brunoTotals.TotalIncome);
-        Assert.Equal(100m, brunoTotals.TotalExpense);
-        Assert.Equal(-100m, brunoTotals.Balance);
+        var marianaTotals = Assert.Single(report.People, person => person.PersonId == mariana.Id);
+        var carlosTotals = Assert.Single(report.People, person => person.PersonId == carlos.Id);
+        Assert.Equal(1000.50m, marianaTotals.TotalIncome);
+        Assert.Equal(250.25m, marianaTotals.TotalExpense);
+        Assert.Equal(750.25m, marianaTotals.Balance);
+        Assert.Equal(0m, carlosTotals.TotalIncome);
+        Assert.Equal(100m, carlosTotals.TotalExpense);
+        Assert.Equal(-100m, carlosTotals.Balance);
         Assert.Equal(1000.50m, report.Overall.TotalIncome);
         Assert.Equal(350.25m, report.Overall.TotalExpense);
         Assert.Equal(650.25m, report.Overall.Balance);
@@ -90,11 +90,11 @@ public class ReportsEndpointsTests
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
-        var ana = await CreatePersonAsync(client, "Ana", 28);
-        await CreateTransactionAsync(client, ana.Id, TransactionType.Income, 1000m);
-        await CreateTransactionAsync(client, ana.Id, TransactionType.Expense, 250m);
+        var mariana = await CreatePersonAsync(client, "Mariana Freitas", 28);
+        await CreateTransactionAsync(client, mariana.Id, TransactionType.Income, 1000m);
+        await CreateTransactionAsync(client, mariana.Id, TransactionType.Expense, 250m);
 
-        var deleteResponse = await client.DeleteAsync($"/api/people/{ana.Id}");
+        var deleteResponse = await client.DeleteAsync($"/api/people/{mariana.Id}");
         var report = await client.GetFromJsonAsync<TotalsReportResponse>("/api/reports/totals");
 
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
@@ -110,11 +110,11 @@ public class ReportsEndpointsTests
     {
         using var factory = new CustomWebApplicationFactory();
         var client = factory.CreateClient();
-        var ana = await CreatePersonAsync(client, "Ana", 28);
-        await CreateTransactionAsync(client, ana.Id, TransactionType.Income, 1000m);
+        var mariana = await CreatePersonAsync(client, "Mariana Freitas", 28);
+        await CreateTransactionAsync(client, mariana.Id, TransactionType.Income, 1000m);
 
         var firstReport = await client.GetFromJsonAsync<TotalsReportResponse>("/api/reports/totals");
-        await CreateTransactionAsync(client, ana.Id, TransactionType.Expense, 300m);
+        await CreateTransactionAsync(client, mariana.Id, TransactionType.Expense, 300m);
         var secondReport = await client.GetFromJsonAsync<TotalsReportResponse>("/api/reports/totals");
 
         Assert.NotNull(firstReport);
@@ -143,7 +143,7 @@ public class ReportsEndpointsTests
     {
         var response = await client.PostAsJsonAsync("/api/transactions", new CreateTransactionRequest
         {
-            Description = $"Transação {type}",
+            Description = type == TransactionType.Income ? "Salário mensal" : "Conta de energia",
             Value = value,
             Type = type,
             PersonId = personId

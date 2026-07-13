@@ -7,19 +7,19 @@ import type { Transaction } from '../../types/transaction'
 const transactions: Transaction[] = [
   {
     id: 1,
-    description: 'Salário',
+    description: 'Salário mensal',
     value: 2500,
     type: TransactionType.Income,
     personId: 1,
-    personName: 'Ana',
+    personName: 'Mariana Freitas',
   },
   {
     id: 2,
-    description: 'Mercado',
+    description: 'Compra de supermercado',
     value: 120.5,
     type: TransactionType.Expense,
     personId: 1,
-    personName: 'Ana',
+    personName: 'Mariana Freitas',
   },
 ]
 
@@ -27,8 +27,8 @@ describe('TransactionsList', () => {
   it('exibe descrição, pessoa, tipo e valores formatados em reais', () => {
     render(<TransactionsList transactions={transactions} />)
 
-    expect(screen.getByText('Salário')).toBeInTheDocument()
-    expect(screen.getAllByText('Ana')).toHaveLength(2)
+    expect(screen.getByText('Salário mensal')).toBeInTheDocument()
+    expect(screen.getAllByText('Mariana Freitas')).toHaveLength(2)
     expect(screen.getByText('Receita')).toBeInTheDocument()
     expect(screen.getByText('Despesa')).toBeInTheDocument()
     expect(screen.getByText('R$ 2.500,00')).toBeInTheDocument()
