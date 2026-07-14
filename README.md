@@ -4,8 +4,8 @@ Casa em Conta é um sistema web para controle de gastos residenciais. A aplicaç
 
 ## Funcionalidades
 
-- Cadastro, listagem, busca e exclusão de pessoas.
-- Cadastro e listagem de transações.
+- Cadastro, listagem e exclusão de pessoas.
+- Cadastro de transações associadas a pessoas previamente cadastradas.
 - Restrição de receitas para pessoas menores de 18 anos.
 - Exclusão em cascata das transações ao excluir uma pessoa.
 - Consulta de totais por pessoa, incluindo pessoas sem transações.
@@ -49,7 +49,9 @@ casa-em-conta/
 
 ## Executar o back-end
 
-```powershell
+Abra um terminal na raiz do projeto.
+
+```bash
 dotnet tool restore
 dotnet restore
 dotnet tool run dotnet-ef database update --project backend/CasaEmConta.Api --startup-project backend/CasaEmConta.Api
@@ -78,7 +80,7 @@ http://localhost:5077/api/health
 
 Em outro terminal:
 
-```powershell
+```bash
 cd frontend
 npm install
 npm run dev
@@ -96,8 +98,16 @@ O arquivo `.env` é local e não é enviado ao repositório.
 
 Para criar o arquivo a partir do exemplo, execute dentro da pasta `frontend`:
 
+Windows — PowerShell:
+
 ```powershell
 Copy-Item .env.example .env
+```
+
+Linux, macOS ou Git Bash:
+
+```bash
+cp .env.example .env
 ```
 
 Ou crie manualmente:
@@ -178,33 +188,33 @@ O banco SQLite local é criado vazio em `backend/CasaEmConta.Api/casaemconta.db`
 
 Back-end:
 
-```powershell
+```bash
 dotnet test CasaEmConta.sln
 ```
 
 Cobertura do back-end:
 
-```powershell
+```bash
 dotnet test CasaEmConta.sln --collect:"XPlat Code Coverage"
 ```
 
 Front-end:
 
-```powershell
+```bash
 cd frontend
 npm test
 ```
 
 Cobertura do front-end:
 
-```powershell
+```bash
 cd frontend
 npm run test:coverage
 ```
 
 Build e lint do front-end:
 
-```powershell
+```bash
 cd frontend
 npm run build
 npm run lint
