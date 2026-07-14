@@ -117,5 +117,3 @@ Os testes manuais devem validar o sistema completo com API e front-end rodando a
 ## Limitações conhecidas
 
 - Não há testes end-to-end com navegador real nesta etapa.
-- Componentes de layout simples não possuem testes dedicados quando o comportamento já é coberto por páginas ou componentes consumidores.
-- Não há meta obrigatória de cobertura para evitar incentivos a testes artificiais.
