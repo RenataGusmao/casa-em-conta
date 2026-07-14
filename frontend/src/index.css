@@ -810,6 +810,11 @@ p {
   min-width: 760px;
 }
 
+.transactions-table th:last-child,
+.transactions-table td:last-child {
+  padding-right: 24px;
+  text-align: right;
+}
 .transaction-type {
   align-items: center;
   color: var(--color-text);
